@@ -1,0 +1,20 @@
+use_sim_time: true
+carla:
+  # the network connection for the python connection to CARLA
+  host: '172.17.0.1'
+  port: 2000
+  timeout: 10
+  passive: False
+  synchronous_mode: True
+  synchronous_mode_wait_for_vehicle_control_command: False
+  #fixed_delta_seconds: 0.05
+  #fixed_delta_seconds: 0.05
+  fixed_delta_seconds: 0.05
+  register_all_sensors: True
+  town: 'Town01'
+  # configuration values for the ego vehicle
+  ego_vehicle:
+    # the role name of the vehicles that acts as ego vehicle for this ros bridge instance
+    # Only the vehicles within this list are controllable from within ROS.
+    # (the vehicle from CARLA is selected which has the attribute 'role_name' set to this value)
+    role_name: ["hero", "ego_vehicle"]

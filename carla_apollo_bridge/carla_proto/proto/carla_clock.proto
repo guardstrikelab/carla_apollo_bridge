@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message Time {
+  optional int64 secs = 1;
+  optional int64 nsecs = 2;
+}
+
+message Clock {
+  optional Time clock = 1;
+};

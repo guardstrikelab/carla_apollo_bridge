@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "modules/data/proto/frame.proto";
+
+message CarlaWalkerControl {
+  optional Vector3 direction = 1;
+  optional float speed = 2;
+  optional bool jump = 3;
+};

@@ -1,0 +1,60 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/geometry.proto";
+import "modules/data/proto/frame.proto";
+import "modules/localization/proto/pose.proto";
+
+message ColorRGBA {
+  optional float r = 1;
+  optional float g = 2;
+  optional float b = 3;
+  optional float a = 4;
+};
+
+message Marker {
+
+  enum MakerType {
+    ARROW            = 0;
+    CUBE             = 1;
+    SPHERE           = 2;
+    CYLINDER         = 3;
+    LINE_STRIP       = 4;
+    LINE_LIST        = 5;
+    CUBE_LIST        = 6;
+    SPHERE_LIST      = 7;
+    POINTS           = 8;
+    TEXT_VIEW_FACING = 9;
+    MESH_RESOURCE    = 10;
+    TRIANGLE_LIST    = 11;
+  }
+
+  enum ActionType {
+    ADD       = 0;
+    MODIFY    = 1;
+    DELETE    = 2;
+    DELETEALL = 3;
+  }
+
+  optional apollo.common.Header header = 1;
+  optional string ns = 2;
+  optional int32 id = 3;
+  optional int32 type = 4;
+  optional int32 action = 5;
+  optional apollo.localization.Pose pose = 6;
+  optional Vector3 scale = 7;
+  optional ColorRGBA color = 8;
+  optional int32 lifetime = 9;
+  optional bool frame_locked = 10;
+  repeated apollo.common.Point3D points = 11;
+  repeated ColorRGBA colors = 12;
+  optional string text = 13;
+  optional string mesh_resource = 14;
+  optional bool mesh_use_embedded_materials = 15;
+};
+
+message MarkerList {
+  repeated Marker markers = 1;
+};

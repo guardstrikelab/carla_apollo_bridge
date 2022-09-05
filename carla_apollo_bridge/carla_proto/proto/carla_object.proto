@@ -1,0 +1,49 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "cyber/carla_bridge/carla_proto/proto/carla_geometry.proto";
+import "modules/common/proto/header.proto";
+import "modules/common/proto/geometry.proto";
+import "modules/localization/proto/pose.proto";
+
+message Object {
+
+  enum DetectionLevel {
+    OBJECT_DETECTED               = 0;
+    OBJECT_TRACKED                = 1;
+  };
+
+  enum Classification {
+    UNKNOWN        = 0;
+    UNKNOWN_SMALL  = 1;
+    UNKNOWN_MEDIUM = 2;
+    UNKNOWN_BIG    = 3;
+    PEDESTRIAN     = 4;
+    BIKE           = 5;
+    CAR            = 6;
+    TRUCK          = 7;
+    MOTORCYCLE     = 8;
+    OTHER_VEHICLE  = 9;
+    BARRIER        = 10;
+    SIGN           = 11;
+  };
+
+  optional apollo.common.Header header = 1;
+  optional uint32 id = 2;
+  optional DetectionLevel detection_level = 3;
+  optional bool object_classified = 4;
+  optional apollo.localization.Pose pose = 5;
+  optional Twist twist = 6;
+  optional Accel accel = 7;
+  optional apollo.common.Polygon polygon = 8;
+  optional SolidPrimitive shape = 9;
+  optional Classification classification = 10;
+  optional uint32 classification_certainty = 11;
+  optional uint32 classification_age = 12;
+};
+
+message ObjectList {
+  optional apollo.common.Header header = 1;
+  repeated Object objects = 2;
+};

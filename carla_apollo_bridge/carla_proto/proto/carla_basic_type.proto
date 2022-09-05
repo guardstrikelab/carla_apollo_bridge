@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message FloatValue {
+  optional float value = 1;
+};
+
+message StringValue {
+  optional string value = 1;
+};

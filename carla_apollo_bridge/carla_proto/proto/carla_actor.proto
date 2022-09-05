@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message CarlaActorInfo {
+  optional uint32 id = 1;
+  optional uint32 parent_id = 2;  // 0 if no parent available
+  optional string type = 3;
+  optional string rolename = 4;
+};
+
+message CarlaActorList {
+  repeated CarlaActorInfo actors = 1;
+};

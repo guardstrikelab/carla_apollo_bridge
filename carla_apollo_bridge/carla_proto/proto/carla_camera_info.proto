@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "modules/common/proto/header.proto";
+
+message RegionOfInterest {
+  optional uint32 x_offset = 1;
+  optional uint32 y_offset = 2;
+  optional uint32 height = 3;
+  optional uint32 width = 4;
+  optional bool do_rectify = 5;
+};
+
+message CameraInfo {
+  optional apollo.common.Header header = 1;
+  optional uint32 height = 2;
+  optional uint32 width = 3;
+  optional string distortion_model = 4;
+  repeated float D = 5;
+  repeated float K = 6;  // dim = 9
+  repeated float R = 7;  // dim = 9
+  repeated float P = 8;  // dim = 12
+  optional uint32 binning_x = 9;
+  optional uint32 binning_y = 10;
+  optional RegionOfInterest roi = 11;
+};
