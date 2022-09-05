@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "cyber/carla_bridge/carla_proto/proto/carla_bounding_box.proto";
+import "modules/localization/proto/pose.proto";
+
+message CarlaTrafficLightInfo {
+  optional uint32 id = 1;
+  optional apollo.localization.Pose transform = 2;
+  optional CarlaBoundingBox trigger_volume = 3;  // position is relative to transform
+};
+
+message CarlaTrafficLightInfoList {
+  repeated CarlaTrafficLightInfo traffic_lights = 1;
+};
+
+message CarlaTrafficLightStatus {
+
+  enum TrafficLightState {
+    RED     = 0;
+    YELLOW  = 1;
+    GREEN   = 2;
+    OFF     = 3;
+    UNKNOWN = 4;
+  };
+
+  optional uint32 id = 1;
+  optional TrafficLightState state = 2;
+};
+
+message CarlaTrafficLightStatusList {
+  repeated CarlaTrafficLightStatus traffic_lights = 1;
+};

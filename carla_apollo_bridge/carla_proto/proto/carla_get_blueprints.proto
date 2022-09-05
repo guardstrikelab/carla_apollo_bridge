@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message GetBlueprintsRequest {
+  optional string filter = 1;
+};
+
+message GetBlueprintsResponse {
+  repeated string blueprints = 1;
+};

@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "modules/data/proto/frame.proto";
+
+message CarlaBoundingBox {
+  optional Vector3 center = 1;
+  optional Vector3 size = 2;
+};

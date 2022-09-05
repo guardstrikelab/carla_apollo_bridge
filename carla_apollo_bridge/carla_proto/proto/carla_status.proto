@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message CarlaStatus {
+  optional uint64 frame = 1;                   // frame number
+  optional float fixed_delta_seconds = 2;      // duration of one frame
+  optional bool synchronous_mode = 3;          // carla is in synchronous mode
+  optional bool synchronous_mode_running = 4;  // true: running, false: paused
+};

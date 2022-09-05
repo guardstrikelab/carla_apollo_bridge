@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message CarlaWeatherParameters {
+  optional float cloudiness = 1;
+  optional float precipitation = 2;
+  optional float precipitation_deposits = 3;
+  optional float wind_intensity = 4;
+  optional float fog_density = 5;
+  optional float fog_distance = 6;
+  optional float wetness = 7;
+  optional float sun_azimuth_angle = 8;
+  optional float sun_altitude_angle = 9;
+};

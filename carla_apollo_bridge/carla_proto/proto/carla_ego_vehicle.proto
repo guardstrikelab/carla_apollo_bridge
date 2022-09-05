@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "cyber/carla_bridge/carla_proto/proto/carla_geometry.proto";
+import "modules/data/proto/frame.proto";
+import "modules/common/proto/header.proto";
+import "modules/common/proto/geometry.proto";
+
+message CarlaEgoVehicleControl {
+
+  optional apollo.common.Header header = 1;
+
+  // The CARLA vehicle control data
+
+  // 0. <= throttle <= 1.
+  optional float throttle = 2;
+
+  // -1. <= steer <= 1.
+  optional float steer = 3;
+
+  // 0. <= brake <= 1.
+  optional float brake = 4;
+
+  // hand_brake 0 or 1
+  optional bool hand_brake = 5;
+
+  // reverse 0 or 1
+  optional bool reverse = 6;
+
+  // gear
+  optional int32 gear = 7;
+
+  // manual gear shift
+  optional bool manual_gear_shift = 8;
+};
+
+message CarlaEgoVehicleInfo {
+  optional uint32 id = 1;
+  optional string type = 2;
+  optional string rolename = 3;
+  repeated CarlaEgoVehicleInfoWheel wheels = 4;
+  optional float max_rpm = 5;
+  optional float moi = 6;
+  optional float damping_rate_full_throttle = 7;
+  optional float damping_rate_zero_throttle_clutch_engaged = 8;
+  optional float damping_rate_zero_throttle_clutch_disengaged = 9;
+  optional bool use_gear_autobox = 10;
+  optional float gear_switch_time = 11;
+  optional float clutch_strength = 12;
+  optional float mass = 13;
+  optional float drag_coefficient = 14;
+  optional Vector3 center_of_mass = 15;
+};
+
+message CarlaEgoVehicleInfoWheel {
+  optional float tire_friction = 1;
+  optional float damping_rate = 2;
+  optional float max_steer_angle = 3;
+  optional float radius = 4;
+  optional float max_brake_torque = 5;
+  optional float max_handbrake_torque = 6;
+  optional Vector3 position = 7;
+};
+
+message CarlaEgoVehicleStatus {
+  optional apollo.common.Header header = 1;
+
+  optional float velocity = 2;
+  optional Accel acceleration = 3;
+  optional apollo.common.Quaternion orientation = 4;
+
+  // the current control values, as reported by Carla
+  optional CarlaEgoVehicleControl control = 5;
+};

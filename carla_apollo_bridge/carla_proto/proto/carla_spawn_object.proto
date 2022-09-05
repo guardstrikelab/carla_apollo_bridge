@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+import "modules/localization/proto/pose.proto";
+
+message KeyValue {
+  optional string key = 1;
+  optional string value = 2;
+};
+
+message SpawnObjectRequest {
+  optional string type = 1;
+  optional string id = 2;
+  optional uint32 attach_to = 3;
+  optional bool random_pose = 4;
+  optional apollo.localization.Pose transform = 5;
+  repeated KeyValue attributes = 6;
+};
+
+message SpawnObjectResponse {
+  optional int32 id = 1;
+  optional string error_string = 2;
+};

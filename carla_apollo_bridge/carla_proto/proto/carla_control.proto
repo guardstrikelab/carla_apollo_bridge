@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message CarlaControl{
+  enum Command {
+    PLAY = 0;
+    PAUSE = 1;
+    STEP_ONCE = 2;
+  };
+
+  optional int32 command = 1;
+};

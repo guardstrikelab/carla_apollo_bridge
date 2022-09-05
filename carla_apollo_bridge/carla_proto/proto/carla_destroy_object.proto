@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package apollo.cyber.carla_bridge.proto;
+
+message DestroyObjectRequest {
+  optional int32 id = 1;
+};
+
+message DestroyObjectResponse {
+  optional bool success = 1;
+};
