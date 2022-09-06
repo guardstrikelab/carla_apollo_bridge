@@ -3,7 +3,7 @@ carla:
   # the network connection for the python connection to CARLA
   host: '172.17.0.1'
   port: 2000
-  timeout: 10
+  timeout: 30
   passive: False
   synchronous_mode: True
   synchronous_mode_wait_for_vehicle_control_command: False

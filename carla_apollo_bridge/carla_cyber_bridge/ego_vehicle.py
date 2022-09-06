@@ -13,21 +13,21 @@ import math
 import os
 import time
 
-import numpy
+import numpy as np
 import carla
-from carla import VehicleControl
+from carla import VehicleControl, Location
 
 from carla_cyber_bridge.vehicle import Vehicle
-
+from carla_common import transforms as trans
 from cyber.proto.parameter_pb2 import BoolResult
-import carla_common.transforms as trans
+
 from cyber.carla_bridge.carla_proto.proto.carla_ego_vehicle_pb2 import (
     CarlaEgoVehicleInfo,
     CarlaEgoVehicleInfoWheel,
     CarlaEgoVehicleStatus
 )
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA
-
+from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import Twist, Accel
 from modules.localization.proto.localization_pb2 import LocalizationEstimate, LocalizationStatus
 from modules.localization.proto.gps_pb2 import Gps
 from modules.canbus.proto.chassis_pb2 import Chassis
@@ -35,19 +35,8 @@ from modules.control.proto.control_cmd_pb2 import ControlCommand
 from modules.planning.proto.planning_pb2 import ADCTrajectory
 from modules.common.proto.error_code_pb2 import ErrorCode
 from modules.routing.proto.routing_pb2 import RoutingResponse
-from modules.map.relative_map.proto.relative_map_config_pb2 import NavigationLaneConfig
-from modules.perception.proto.traffic_light_detection_pb2 import TrafficLightDetection
 from modules.transform.proto.transform_pb2 import TransformStamped, TransformStampeds
-from modules.common.proto.geometry_pb2 import Point3D
-from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import Twist, Accel
-import os, sys
-import json
 
-import ctypes
-#from ctypes import *
-
-# import redis
-# r = redis.Redis(host="172.16.19.58", port=6379, db=1, password="123456", decode_responses=True)
 
 class EgoVehicle(Vehicle):
 
@@ -76,9 +65,11 @@ class EgoVehicle(Vehicle):
                                          node=node,
                                          carla_actor=carla_actor)
         self.world = world
+        self.map = self.world.get_map()
+
         self.vehicle_info_writed = False
         self.vehicle_control_override = False
-        self.vehicle_begin_run = False
+
         self._vehicle_control_applied_callback = vehicle_control_applied_callback
 
         self.vehicle_chassis_writer = node.new_writer(
@@ -156,267 +147,147 @@ class EgoVehicle(Vehicle):
         vehicle_chassis.header.frame_id = 'ego_vehicle'
         vehicle_chassis.engine_started = True
         vehicle_chassis.speed_mps = self.get_vehicle_speed_abs(self.carla_actor)
-        # vehicle_chassis.speed_mps = self.get_vehicle_speed_abs(self.carla_actor) / 3.6
-
         vehicle_chassis.throttle_percentage = self.carla_actor.get_control().throttle * 100.0
         vehicle_chassis.brake_percentage = self.carla_actor.get_control().brake * 100.0
         vehicle_chassis.steering_percentage = -self.carla_actor.get_control().steer * 100.0
-        # if vehicle_chassis.steering_percentage < 1e-4:
-        #     vehicle_chassis.steering_percentage = 0
-
-
-        # vehicle_chassis.brake_percentage = 0
-        # vehicle_chassis.throttle_percentage = 0
-
         vehicle_chassis.parking_brake = self.carla_actor.get_control().hand_brake
         vehicle_chassis.driving_mode = Chassis.DrivingMode.COMPLETE_AUTO_DRIVE
         self.vehicle_chassis_writer.write(vehicle_chassis)
-        self.node.loginfo("write chassis module ===throttle is {}, brake is {},  steer is {}".format(
-            vehicle_chassis.throttle_percentage, vehicle_chassis.brake_percentage, vehicle_chassis.steering_percentage))
+        # self.node.loginfo("write chassis module ===throttle is {}, brake is {},  steer is {}".format(
+        #     vehicle_chassis.throttle_percentage, vehicle_chassis.brake_percentage, vehicle_chassis.steering_percentage))
 
         # only send vehicle once (in latched-mode)
         if not self.vehicle_info_writed:
-	        self.vehicle_info_writed = True
-	        vehicle_info = CarlaEgoVehicleInfo()
-	        vehicle_info.id = self.carla_actor.id
-	        vehicle_info.type = self.carla_actor.type_id
-	        vehicle_info.rolename = self.carla_actor.attributes.get('role_name')
-	        vehicle_physics = self.carla_actor.get_physics_control()
+            self.vehicle_info_writed = True
+            vehicle_info = CarlaEgoVehicleInfo()
+            vehicle_info.id = self.carla_actor.id
+            vehicle_info.type = self.carla_actor.type_id
+            vehicle_info.rolename = self.carla_actor.attributes.get('role_name')
+            vehicle_physics = self.carla_actor.get_physics_control()
 
-	        for wheel in vehicle_physics.wheels:
-	            wheel_info = CarlaEgoVehicleInfoWheel()
-	            wheel_info.tire_friction = wheel.tire_friction
-	            wheel_info.damping_rate = wheel.damping_rate
-	            wheel_info.max_steer_angle = math.radians(wheel.max_steer_angle)
-	            wheel_info.radius = wheel.radius
-	            wheel_info.max_brake_torque = wheel.max_brake_torque
-	            wheel_info.max_handbrake_torque = wheel.max_handbrake_torque
+            for wheel in vehicle_physics.wheels:
+                wheel_info = CarlaEgoVehicleInfoWheel()
+                wheel_info.tire_friction = wheel.tire_friction
+                wheel_info.damping_rate = wheel.damping_rate
+                wheel_info.max_steer_angle = math.radians(wheel.max_steer_angle)
+                wheel_info.radius = wheel.radius
+                wheel_info.max_brake_torque = wheel.max_brake_torque
+                wheel_info.max_handbrake_torque = wheel.max_handbrake_torque
 
-	            inv_T = numpy.array(self.carla_actor.get_transform().get_inverse_matrix(), dtype=float)
-	            wheel_pos_in_map = numpy.array([wheel.position.x/100.0,
-	                                    wheel.position.y/100.0,
-	                                    wheel.position.z/100.0,
-	                                    1.0])
-	            wheel_pos_in_ego_vehicle = numpy.matmul(inv_T, wheel_pos_in_map)
-	            wheel_info.position.x = wheel_pos_in_ego_vehicle[0]
-	            wheel_info.position.y = -wheel_pos_in_ego_vehicle[1]
-	            wheel_info.position.z = wheel_pos_in_ego_vehicle[2]
-	            vehicle_info.wheels.append(wheel_info)
+                inv_T = np.array(self.carla_actor.get_transform().get_inverse_matrix(), dtype=float)
+                wheel_pos_in_map = np.array([wheel.position.x/100.0,
+                                        wheel.position.y/100.0,
+                                        wheel.position.z/100.0,
+                                        1.0])
+                wheel_pos_in_ego_vehicle = np.matmul(inv_T, wheel_pos_in_map)
+                wheel_info.position.x = wheel_pos_in_ego_vehicle[0]
+                wheel_info.position.y = -wheel_pos_in_ego_vehicle[1]
+                wheel_info.position.z = wheel_pos_in_ego_vehicle[2]
+                vehicle_info.wheels.append(wheel_info)
 
-	        vehicle_info.max_rpm = vehicle_physics.max_rpm
-	        vehicle_info.max_rpm = vehicle_physics.max_rpm
-	        vehicle_info.moi = vehicle_physics.moi
-	        vehicle_info.damping_rate_full_throttle = vehicle_physics.damping_rate_full_throttle
-	        vehicle_info.damping_rate_zero_throttle_clutch_engaged = \
-	            vehicle_physics.damping_rate_zero_throttle_clutch_engaged
-	        vehicle_info.damping_rate_zero_throttle_clutch_disengaged = \
-	            vehicle_physics.damping_rate_zero_throttle_clutch_disengaged
-	        vehicle_info.use_gear_autobox = vehicle_physics.use_gear_autobox
-	        vehicle_info.gear_switch_time = vehicle_physics.gear_switch_time
-	        vehicle_info.clutch_strength = vehicle_physics.clutch_strength
-	        vehicle_info.mass = vehicle_physics.mass
-	        vehicle_info.drag_coefficient = vehicle_physics.drag_coefficient
-	        vehicle_info.center_of_mass.x = vehicle_physics.center_of_mass.x
-	        vehicle_info.center_of_mass.y = vehicle_physics.center_of_mass.y
-	        vehicle_info.center_of_mass.z = vehicle_physics.center_of_mass.z
+            vehicle_info.max_rpm = vehicle_physics.max_rpm
+            vehicle_info.max_rpm = vehicle_physics.max_rpm
+            vehicle_info.moi = vehicle_physics.moi
+            vehicle_info.damping_rate_full_throttle = vehicle_physics.damping_rate_full_throttle
+            vehicle_info.damping_rate_zero_throttle_clutch_engaged = \
+                vehicle_physics.damping_rate_zero_throttle_clutch_engaged
+            vehicle_info.damping_rate_zero_throttle_clutch_disengaged = \
+                vehicle_physics.damping_rate_zero_throttle_clutch_disengaged
+            vehicle_info.use_gear_autobox = vehicle_physics.use_gear_autobox
+            vehicle_info.gear_switch_time = vehicle_physics.gear_switch_time
+            vehicle_info.clutch_strength = vehicle_physics.clutch_strength
+            vehicle_info.mass = vehicle_physics.mass
+            vehicle_info.drag_coefficient = vehicle_physics.drag_coefficient
+            vehicle_info.center_of_mass.x = vehicle_physics.center_of_mass.x
+            vehicle_info.center_of_mass.y = vehicle_physics.center_of_mass.y
+            vehicle_info.center_of_mass.z = vehicle_physics.center_of_mass.z
 
-	        self.vehicle_info_writer.write(vehicle_info)
+            self.vehicle_info_writer.write(vehicle_info)
 
-        # # '''
-        # # Mock locaization estimate.
-        # # '''
-        # id = self.carla_actor.id
-        # print "####carla_actor Id:%s" % id
-        # transform = self.carla_actor.get_transform()
-        # carla_linear_velocity = self.carla_actor.get_velocity()
-        # carla_angular_velocity = self.carla_actor.get_angular_velocity()
-        # carla_line_accel = self.carla_actor.get_acceleration()
-        #
-        # # spectator = self.world.get_spectator()
-        # # spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
-        #
-        # my_maps = self.world.get_map()
-        # waypoint = my_maps.get_waypoint(transform.location, project_to_road=True, lane_type=(carla.LaneType.Driving))
-        # print "waypoint"
-        # print waypoint
-        #
-        # localization_estimate = LocalizationEstimate()
-        # localization_estimate.header.timestamp_sec = self.node.get_time()
-        # localization_estimate.header.frame_id = 'novatel'
-        #
-        # cyber_pose = trans.carla_transform_to_cyber_pose(transform)
-        # localization_estimate.pose.position.x = cyber_pose.position.x
-        # localization_estimate.pose.position.y = cyber_pose.position.y
-        # localization_estimate.pose.position.z = cyber_pose.position.z
-        # self.node.loginfo("position.x is {}, position.y is {}, position.z is {}".format(cyber_pose.position.x,
-        #                                                                                 cyber_pose.position.y,
-        #                                                                                 cyber_pose.position.z))
-        # # add orientation
-        # localization_estimate.pose.orientation.qx = cyber_pose.orientation.qx
-        # localization_estimate.pose.orientation.qy = cyber_pose.orientation.qy
-        # localization_estimate.pose.orientation.qz = cyber_pose.orientation.qz
-        # localization_estimate.pose.orientation.qw = cyber_pose.orientation.qw
-        #
-        # # localization_estimate.pose.linear_velocity.x = linear_vel.x
-        # # localization_estimate.pose.linear_velocity.y = linear_vel.y
-        # # localization_estimate.pose.linear_velocity.z = linear_vel.z
-        # roll, pitch, yaw = trans.cyber_quaternion_to_cyber_euler(cyber_pose.orientation)
-        # self.node.loginfo("roll is {}, pitch is {}, yaw is {}".format(roll, pitch, yaw))
-        #
-        # cyber_twist = Twist()
-        # cyber_twist = trans.carla_velocity_to_cyber_twist(carla_linear_velocity, carla_angular_velocity)
-        # localization_estimate.pose.linear_velocity.x = cyber_twist.linear.x
-        # localization_estimate.pose.linear_velocity.y = cyber_twist.linear.y
-        # localization_estimate.pose.linear_velocity.z = cyber_twist.linear.z
-        #
-        # self.node.loginfo("1 linear_velocity.x is {}, linear_velocity.y is {}, linear_velocity.z is {}".format(
-        #     localization_estimate.pose.linear_velocity.x, localization_estimate.pose.linear_velocity.y,
-        #     localization_estimate.pose.linear_velocity.z))
-        #
-        #
-        # # enu_linear_velocity = trans.b2n(pitch, roll, yaw, [carla_linear_velocity.x, carla_linear_velocity.y, carla_linear_velocity.z])
-        # # localization_estimate.pose.linear_velocity.x = enu_linear_velocity[0, 0]
-        # # localization_estimate.pose.linear_velocity.y = enu_linear_velocity[0, 1]
-        # # localization_estimate.pose.linear_velocity.z = enu_linear_velocity[0, 2]
-        #
-        # self.node.loginfo("2 linear_velocity.x is {}, linear_velocity.y is {}, linear_velocity.z is {}".format(
-        #     localization_estimate.pose.linear_velocity.x, localization_estimate.pose.linear_velocity.y,
-        #     localization_estimate.pose.linear_velocity.z))
-        #
-        #
-        # cyber_line_accel = Accel()
-        # cyber_line_accel = trans.carla_acceleration_to_cyber_accel(carla_line_accel)
-        # localization_estimate.pose.linear_acceleration.x = cyber_line_accel.linear.x
-        # localization_estimate.pose.linear_acceleration.y = cyber_line_accel.linear.y
-        # localization_estimate.pose.linear_acceleration.z = cyber_line_accel.linear.z
-        #
-        # # self.node.loginfo("1 linear_acceleration.x is {}, linear_acceleration.y is {}, linear_acceleration.z is {}".format(
-        # #     localization_estimate.pose.linear_acceleration.x, localization_estimate.pose.linear_acceleration.y,
-        # #     localization_estimate.pose.linear_acceleration.z))
-        #
-        # # enu_accel_velocity = trans.b2n(pitch, roll, yaw, [carla_line_accel.x, carla_line_accel.y, carla_line_accel.z])
-        # # localization_estimate.pose.linear_acceleration.x = enu_accel_velocity[0, 0]
-        # # localization_estimate.pose.linear_acceleration.y = enu_accel_velocity[0, 1]
-        # # localization_estimate.pose.linear_acceleration.z = enu_accel_velocity[0, 2]
-        #
-        #
-        # self.node.loginfo("2 linear_acceleration.x is {}, linear_acceleration.y is {}, linear_acceleration.z is {}".format(
-        #     localization_estimate.pose.linear_acceleration.x, localization_estimate.pose.linear_acceleration.y,
-        #     localization_estimate.pose.linear_acceleration.z))
-        #
-        #
-        # localization_estimate.pose.angular_velocity.x = cyber_twist.angular.x
-        # localization_estimate.pose.angular_velocity.y = cyber_twist.angular.y
-        # localization_estimate.pose.angular_velocity.z = cyber_twist.angular.z
-        #
-        # # mrf_angular_velocity = Point3D()
-        # # mrf_angular_velocity.x = cyber_twist.angular.x
-        # # mrf_angular_velocity.y = cyber_twist.angular.y
-        # # mrf_angular_velocity.z = cyber_twist.angular.z
-        # #
-        # # localization_estimate.pose.angular_velocity.x = mrf_angular_velocity.x
-        # # localization_estimate.pose.angular_velocity.y = mrf_angular_velocity.y
-        # # localization_estimate.pose.angular_velocity.z = mrf_angular_velocity.z
-        # #
-        # self.node.loginfo("1 angular_velocity.x is {}, angular_velocity.y is {}, angular_velocity.z is {}".format(
-        #     localization_estimate.pose.angular_velocity.x, localization_estimate.pose.angular_velocity.y,
-        #     localization_estimate.pose.angular_velocity.z))
-        #
-        # # enu_angular_velocity = trans.b2n(pitch, roll, yaw, [carla_angular_velocity.x, carla_angular_velocity.y, carla_angular_velocity.z])
-        # # localization_estimate.pose.angular_velocity.x = enu_angular_velocity[0, 0]
-        # # localization_estimate.pose.angular_velocity.y = enu_angular_velocity[0, 1]
-        # # localization_estimate.pose.angular_velocity.z = enu_angular_velocity[0, 2]
-        #
-        # self.node.loginfo("2 angular_velocity.x is {}, angular_velocity.y is {}, angular_velocity.z is {}".format(
-        #     localization_estimate.pose.angular_velocity.x, localization_estimate.pose.angular_velocity.y,
-        #     localization_estimate.pose.angular_velocity.z))
-        #
-        #
-        # vrf_angular_velocity = Point3D()
-        # # / apollo / cyber / carla_bridge / carla_cyber_bridge
-        # command = "/apollo/cyber/carla_bridge/carla_cyber_bridge/sim_control_testmy %s %s %s %s %s %s %s" % (localization_estimate.pose.angular_velocity.x,\
-        #                                                              localization_estimate.pose.angular_velocity.y,\
-        #                                                              localization_estimate.pose.angular_velocity.z,\
-        #                                                              cyber_pose.orientation.qx,\
-        #                                                              cyber_pose.orientation.qy,\
-        #                                                              cyber_pose.orientation.qz,\
-        #                                                              cyber_pose.orientation.qw)
-        # print "cmd:%s" % command
-        # tmp = os.popen(command)
-        # tmpres = tmp.readlines()
-        # print "tmpres %s" %  tmpres
-        # print "tmpres7 %s" % tmpres[7]
-        # vj = json.loads(tmpres[7])
-        # print "vj:%s" % vj
-        # print "vj0:%s" % vj[0]
-        # print "vj0:%s" % vj[1]
-        # print "vj0:%s" % vj[2]
-        #
-        # vrf_angular_velocity.x = vj[0]
-        # vrf_angular_velocity.y = vj[1]
-        # vrf_angular_velocity.z = vj[2]
-        #
-        # localization_estimate.pose.angular_velocity_vrf.x = vrf_angular_velocity.x
-        # localization_estimate.pose.angular_velocity_vrf.y = vrf_angular_velocity.y
-        # localization_estimate.pose.angular_velocity_vrf.z = vrf_angular_velocity.z
-        #
-        # # localization_estimate.pose.linear_acceleration_vrf.x = accel.x
-        # # localization_estimate.pose.linear_acceleration_vrf.y = accel.y
-        # # localization_estimate.pose.linear_acceleration_vrf.z = accel.z
-        #
-        # mrf_linear_acceleration = Point3D()
-        # # mrf_linear_acceleration.x = localization_estimate.pose.linear_acceleration.x
-        # # mrf_linear_acceleration.y = localization_estimate.pose.linear_acceleration.y
-        # # mrf_linear_acceleration.z = localization_estimate.pose.linear_acceleration.z
-        #
-        # vrf_linear_acceleration = Point3D()
-        #
-        # command2 = "/apollo/cyber/carla_bridge/carla_cyber_bridge/sim_control_testmy %s %s %s %s %s %s %s" % (localization_estimate.pose.linear_acceleration.x,\
-        #                                                              localization_estimate.pose.linear_acceleration.y,\
-        #                                                              localization_estimate.pose.linear_acceleration.z,\
-        #                                                              cyber_pose.orientation.qx,\
-        #                                                              cyber_pose.orientation.qy,\
-        #                                                              cyber_pose.orientation.qz,\
-        #                                                              cyber_pose.orientation.qw)
-        # print "vrf_linear_acceleration cmd:%s" % command2
-        # tmp2 = os.popen(command2)
-        # tmpres = tmp2.readlines()
-        # print "tmpres %s" %  tmpres
-        # print "tmpres7 %s" % tmpres[7]
-        # vj = json.loads(tmpres[7])
-        # print "vj:%s" % vj
-        # print "vj0:%s" % vj[0]
-        # print "vj0:%s" % vj[1]
-        # print "vj0:%s" % vj[2]
-        #
-        # vrf_linear_acceleration.x = vj[0]
-        # vrf_linear_acceleration.y = vj[1]
-        # vrf_linear_acceleration.z = vj[2]
-        #
-        # localization_estimate.pose.linear_acceleration_vrf.x = vrf_linear_acceleration.x
-        # localization_estimate.pose.linear_acceleration_vrf.y = vrf_linear_acceleration.y
-        # localization_estimate.pose.linear_acceleration_vrf.z = vrf_linear_acceleration.z
-        #
-        # # luhongliang
-        # # localization_estimate.pose.heading = math.radians(-transform.rotation.yaw)
-        # localization_estimate.pose.heading = math.radians(yaw)
-        #
-        #
-        # self.vehicle_pose_writer.write(localization_estimate)
-        #
-        # localization_status = LocalizationStatus()
-        # localization_status.header.timestamp_sec = self.node.get_time()
-        # localization_status.fusion_status = 0  # OK = 0
-        # localization_status.measurement_time = self.node.get_time()
-        # localization_status.state_message = ""
-        # self.localization_status_writer.write(localization_status)
+        '''
+        Mock locaization estimate.
+        '''
+        self.node.loginfo("=========================================")
+        transform = self.carla_actor.get_transform()
+        linear_vel = self.carla_actor.get_velocity()
+        angular_vel = self.carla_actor.get_angular_velocity()
+        accel = self.carla_actor.get_acceleration()
+        self.node.loginfo("location is {}, rotation is {}".format(transform.location, transform.rotation))
+        self.node.loginfo("linear_vel is is {}".format(linear_vel))
+        self.node.loginfo("angular_vel is is {}".format(angular_vel))
+        self.node.loginfo("accel is is {}".format(accel))
+
+        spectator = self.world.get_spectator()
+        spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
+
+        # if not self.vehicle_localization_wrote:
+        #     self.vehicle_localization_wrote = True
+        localization_estimate = LocalizationEstimate()
+        localization_estimate.header.timestamp_sec = self.node.get_time()
+        localization_estimate.header.frame_id = 'novatel'
+
+        cyber_pose = trans.carla_transform_to_cyber_pose(transform)
+        localization_estimate.pose.position.x = cyber_pose.position.x
+        localization_estimate.pose.position.y = cyber_pose.position.y
+        localization_estimate.pose.position.z = cyber_pose.position.z
+        self.node.loginfo("position.x is {}, position.y is {}, position.z is {}".format(
+            cyber_pose.position.x, cyber_pose.position.y, cyber_pose.position.z))
+
+        localization_estimate.pose.orientation.qx = cyber_pose.orientation.qx
+        localization_estimate.pose.orientation.qy = cyber_pose.orientation.qy
+        localization_estimate.pose.orientation.qz = cyber_pose.orientation.qz
+        localization_estimate.pose.orientation.qw = cyber_pose.orientation.qw
+        self.node.loginfo("qx is {}, qy is {}, qz is {}, qw is {}".format(
+            cyber_pose.orientation.qx, cyber_pose.orientation.qy, cyber_pose.orientation.qz, cyber_pose.orientation.qw))
+
+        cyber_twist = trans.carla_velocity_to_cyber_twist(linear_vel, angular_vel)
+        localization_estimate.pose.linear_velocity.x = cyber_twist.linear.x
+        localization_estimate.pose.linear_velocity.y = cyber_twist.linear.y
+        localization_estimate.pose.linear_velocity.z = cyber_twist.linear.z
+
+        localization_estimate.pose.angular_velocity.x = cyber_twist.angular.x
+        localization_estimate.pose.angular_velocity.y = cyber_twist.angular.y
+        localization_estimate.pose.angular_velocity.z = cyber_twist.angular.z
+
+        cyber_line_accel = trans.carla_acceleration_to_cyber_accel(accel)
+        localization_estimate.pose.linear_acceleration.x = cyber_line_accel.linear.x
+        localization_estimate.pose.linear_acceleration.y = cyber_line_accel.linear.y
+        localization_estimate.pose.linear_acceleration.z = cyber_line_accel.linear.z
+        self.node.loginfo("\n cyber_twist.linear is {}, \n cyber_twist.angular is {}, \n cyber_line_accel is {}".format(
+            cyber_twist.linear, cyber_twist.angular, cyber_line_accel))
+
+        roll, pitch, yaw = trans.cyber_quaternion_to_cyber_euler(cyber_pose.orientation)
+        self.node.loginfo("====roll is {}, pitch is {}, yaw is {}".format(roll, pitch, yaw))
+        # cyber_roll, cyber_pitch, cyber_yaw = trans.carla_rotation_to_RPY(transform.rotation)
+        # self.node.loginfo("++++roll is {}, pitch is {}, yaw is {}".format(cyber_roll, cyber_pitch, cyber_yaw))
+
+        enu_accel_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_line_accel.linear.x,
+                                                                   cyber_line_accel.linear.y,
+                                                                   cyber_line_accel.linear.z]))
+        localization_estimate.pose.linear_acceleration_vrf.x = enu_accel_velocity[0, 0]
+        localization_estimate.pose.linear_acceleration_vrf.y = enu_accel_velocity[0, 1]
+        localization_estimate.pose.linear_acceleration_vrf.z = enu_accel_velocity[0, 2]
+
+        enu_angular_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_twist.angular.x,
+                                                                     cyber_twist.angular.y,
+                                                                     cyber_twist.angular.z]))
+        localization_estimate.pose.angular_velocity_vrf.x = enu_angular_velocity[0, 0]
+        localization_estimate.pose.angular_velocity_vrf.y = enu_angular_velocity[0, 1]
+        localization_estimate.pose.angular_velocity_vrf.z = enu_angular_velocity[0, 2]
+
+        localization_estimate.pose.heading = math.radians(-transform.rotation.yaw)
+        self.vehicle_pose_writer.write(localization_estimate)
+
+        localization_status = LocalizationStatus()
+        localization_status.header.timestamp_sec = self.node.get_time()
+        localization_status.fusion_status = 0  # OK = 0
+        localization_status.measurement_time = self.node.get_time()
+        localization_status.state_message = ""
+        self.localization_status_writer.write(localization_status)
 
         tf_stampeds = TransformStampeds()
         tf_stampeds.transforms.append(self.get_tf_msg())
         self.tf_writer.write(tf_stampeds)
-
-
-
 
     def update(self, frame, timestamp):
         """
@@ -466,7 +337,9 @@ class EgoVehicle(Vehicle):
             vehicle_control = VehicleControl()
             vehicle_control.throttle = cyber_vehicle_control.throttle / 100.0
             vehicle_control.brake = cyber_vehicle_control.brake / 100.0
+            rate = cyber_vehicle_control.steering_rate / 100.0
             vehicle_control.steer = -cyber_vehicle_control.steering_target / 100.0
+            self.node.loginfo("rate is {}, steer is {}".format(rate, -vehicle_control.steer))
             vehicle_control.hand_brake = cyber_vehicle_control.parking_brake
             vehicle_control.reverse = cyber_vehicle_control.gear_location == Chassis.GearPosition.GEAR_REVERSE
             self.carla_actor.apply_control(vehicle_control)

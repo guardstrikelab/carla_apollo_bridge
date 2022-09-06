@@ -161,10 +161,9 @@ class CarlaCyberBridge(CompatibleNode):
             self.carla_control_reader = \
                 self.new_reader("/carla/control", CarlaControl,
                                 self.carla_control_queue.put(self.carla_run_state))
-
             self.synchronous_mode_update_thread = Thread(
                 target=self._synchronous_mode_update)
-
+            self.synchronous_mode_update_thread.daemo = True
             self.synchronous_mode_update_thread.start()
             self.loginfo("synchronous_mode_update_thread start")
         else:
@@ -185,17 +184,16 @@ class CarlaCyberBridge(CompatibleNode):
                                                      SpawnObjectRequest,
                                                      SpawnObjectResponse,
                                                      self.spawn_object)
-        self.logdebug("spawn_object_service.")
         self.destroy_object_service = self.new_service("/carla/destroy_object",
                                                        DestroyObjectRequest,
                                                        DestroyObjectResponse,
                                                        self.destroy_object)
-        self.logdebug("destroy_object_service.")
+
         self.get_blueprints_service = self.new_service("/carla/get_blueprints",
                                                        GetBlueprintsRequest,
                                                        GetBlueprintsResponse,
                                                        self.get_blueprints)
-        self.logdebug("get_blueprints_service.")
+
         self.carla_weather_reader = self.new_reader("/carla/weather_control",
                                                     CarlaWeatherParameters,
                                                     self.on_weather_changed)
@@ -319,7 +317,6 @@ class CarlaCyberBridge(CompatibleNode):
             frame = self.carla_world.tick()
             world_snapshot = self.carla_world.get_snapshot()
 
-
             self.status_writer.set_frame(frame)
             self.update_clock(world_snapshot.timestamp)
             # self.logdebug("Tick for frame {} returned. Waiting for sensor data...".format(
@@ -331,7 +328,6 @@ class CarlaCyberBridge(CompatibleNode):
             if self.parameters['synchronous_mode_wait_for_vehicle_control_command']:
                 # wait for all ego vehicles to send a vehicle control command
                 if self._expected_ego_vehicle_control_command_ids:
-                    self.loginfo("self._expected_ego_vehicle_control_command_ids is {}".format(self._expected_ego_vehicle_control_command_ids))
                     if not self._all_vehicle_control_commands_received.wait(CarlaCyberBridge.VEHICLE_CONTROL_TIMEOUT):
                         self.logwarn("Timeout ({}s) while waiting for vehicle control commands. "
                                      "Missing command from actor ids {}".format(CarlaCyberBridge.VEHICLE_CONTROL_TIMEOUT,
@@ -542,8 +538,6 @@ class CarlaCyberBridge(CompatibleNode):
             else:
                 self.logwarn(
                     "Unexpected vehicle control command received from {}".format(ego_vehicle_id))
-            self.loginfo("============_control_command_ids {}".format(
-                self._expected_ego_vehicle_control_command_ids))
             if not self._expected_ego_vehicle_control_command_ids:
                 self._all_vehicle_control_commands_received.set()
 
