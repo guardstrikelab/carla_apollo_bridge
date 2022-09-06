@@ -16,6 +16,7 @@ finally ask for a random one to the spawn service.
 """
 
 import sys
+import time
 
 sys.path.append("../")
 
@@ -28,8 +29,6 @@ from transforms3d.euler import euler2quat
 import cyber_compatibility as cybercomp
 from cyber_compatibility.exceptions import *
 from cyber_compatibility.node import CompatibleNode
-import carla
-from carla_cyber_bridge.world_info import WorldInfo
 
 from cyber.carla_bridge.carla_proto.proto.carla_spawn_object_pb2 import (
     KeyValue,
@@ -191,7 +190,6 @@ class CarlaSpawnObjects(CompatibleNode):
                 player_spawned = False
                 while not player_spawned and cybercomp.ok():
                     spawn_object_request.transform.CopyFrom(spawn_point)
-
                     response_id = self.spawn_object(spawn_object_request)
                     if response_id != -1:
                         player_spawned = True

@@ -216,8 +216,8 @@ class Sensor(Actor):
                 try:
                     carla_sensor_data = self.queue.get(timeout=1.0)
                     if carla_sensor_data.frame == frame:
-                        self.node.logdebug("{}({}): process {}".format(self.__class__.__name__,
-                                                                       self.get_id(), frame))
+                        # self.node.logdebug("{}({}): process {}".format(self.__class__.__name__,
+                        #                                                self.get_id(), frame))
                         self.write_tf(trans.carla_transform_to_cyber_pose(
                             carla_sensor_data.transform), timestamp)
                         self.sensor_data_updated(carla_sensor_data)

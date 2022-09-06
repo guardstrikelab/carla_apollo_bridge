@@ -26,7 +26,6 @@ from carla_cyber_bridge.actor_list_sensor import ActorListSensor
 from carla_cyber_bridge.camera import Camera, RgbCamera, DepthCamera, SemanticSegmentationCamera, DVSCamera
 from carla_cyber_bridge.collision_sensor import CollisionSensor
 from carla_cyber_bridge.ego_vehicle import EgoVehicle
-#from carla_cyber_bridge.control_ego_vehicle import EgoVehicle
 from carla_cyber_bridge.gnss import Gnss
 from carla_cyber_bridge.imu import ImuSensor
 from carla_cyber_bridge.lane_invasion_sensor import LaneInvasionSensor

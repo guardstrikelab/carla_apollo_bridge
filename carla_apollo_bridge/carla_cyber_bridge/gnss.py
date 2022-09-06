@@ -86,6 +86,7 @@ class Gnss(Sensor):
         :param carla_gnss_measurement: carla gnss measurement object
         :type carla_gnss_measurement: carla.GnssMeasurement
         """
+
         gnss_navsatfix_msg = GnssBestPose()
         gnss_navsatfix_msg.header.CopyFrom(self.get_msg_header(timestamp=carla_gnss_measurement.timestamp))
         gnss_navsatfix_msg.latitude = carla_gnss_measurement.latitude
@@ -103,7 +104,7 @@ class Gnss(Sensor):
         gnss_heading_msg.measurement_time = self.node.get_time()
         roll, pitch, yaw = trans.carla_rotation_to_RPY(self.carla_actor.get_transform().rotation)
         gnss_heading_msg.heading = yaw
-        self.gnss_odometry_writer.write(gnss_heading_msg)
+        self.gnss_heading_writer.write(gnss_heading_msg)
 
         gnss_status_msg = GnssStatus()
         gnss_status_msg.header.timestamp_sec = carla_gnss_measurement.timestamp
