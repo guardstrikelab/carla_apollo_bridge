@@ -14,6 +14,7 @@ import carla_common.transforms as trans
 from .sensor import Sensor
 
 from modules.drivers.gnss.proto.imu_pb2 import Imu
+from modules.localization.proto.imu_pb2 import CorrectedImu
 
 
 class ImuSensor(Sensor):
@@ -49,7 +50,8 @@ class ImuSensor(Sensor):
                                         carla_actor=carla_actor,
                                         synchronous_mode=synchronous_mode)
 
-        self.imu_writer = node.new_writer(self.get_topic_prefix(), Imu, qos_depth=10)
+        # self.imu_writer = node.new_writer(self.get_topic_prefix(), Imu, qos_depth=10)
+        self.imu_writer = node.new_writer('/apollo/sensor/gnss/corrected_imu', CorrectedImu, qos_depth=20)
         self.listen()
 
     def destroy(self):
@@ -72,18 +74,22 @@ class ImuSensor(Sensor):
         :param carla_imu_measurement: carla imu measurement object
         :type carla_imu_measurement: carla.IMUMeasurement
         """
-        imu_msg = Imu()
+        imu_msg = CorrectedImu()
         imu_msg.header.CopyFrom(self.get_msg_header(timestamp=carla_imu_measurement.timestamp))
 
         # Carla uses a left-handed coordinate convention (X forward, Y right, Z up).
         # Here, these measurements are converted to the right-handed ROS convention
         #  (X forward, Y left, Z up).
-        imu_msg.angular_velocity.x = -carla_imu_measurement.gyroscope.x
-        imu_msg.angular_velocity.y = carla_imu_measurement.gyroscope.y
-        imu_msg.angular_velocity.z = -carla_imu_measurement.gyroscope.z
+        imu_msg.imu.angular_velocity.x = -carla_imu_measurement.gyroscope.x
+        imu_msg.imu.angular_velocity.y = carla_imu_measurement.gyroscope.y
+        imu_msg.imu.angular_velocity.z = -carla_imu_measurement.gyroscope.z
 
-        imu_msg.linear_acceleration.x = carla_imu_measurement.accelerometer.x
-        imu_msg.linear_acceleration.y = -carla_imu_measurement.accelerometer.y
-        imu_msg.linear_acceleration.z = carla_imu_measurement.accelerometer.z
+        imu_msg.imu.linear_acceleration.x = carla_imu_measurement.accelerometer.x
+        imu_msg.imu.linear_acceleration.y = -carla_imu_measurement.accelerometer.y
+        imu_msg.imu.linear_acceleration.z = carla_imu_measurement.accelerometer.z
+
+        imu_msg.imu.euler_angles.x = carla_imu_measurement.transform.rotation.roll / 180 * 3.14
+        imu_msg.imu.euler_angles.y = carla_imu_measurement.transform.rotation.pitch / 180 * 3.14
+        imu_msg.imu.euler_angles.z = carla_imu_measurement.transform.rotation.yaw / 180 * 3.14
 
         self.imu_writer.write(imu_msg)
