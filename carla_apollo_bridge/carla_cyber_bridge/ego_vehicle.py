@@ -69,6 +69,7 @@ class EgoVehicle(Vehicle):
 
         self.vehicle_info_writed = False
         self.vehicle_control_override = False
+        self.vehicle_loc_set = False
 
         self._vehicle_control_applied_callback = vehicle_control_applied_callback
 
@@ -99,6 +100,7 @@ class EgoVehicle(Vehicle):
             self.get_topic_prefix() + "/enable_autopilot",
             BoolResult,
             self.enable_autopilot_updated)
+
 
 
 
@@ -207,83 +209,87 @@ class EgoVehicle(Vehicle):
         '''
         Mock locaization estimate.
         '''
-        self.node.loginfo("=========================================")
-        transform = self.carla_actor.get_transform()
-        linear_vel = self.carla_actor.get_velocity()
-        angular_vel = self.carla_actor.get_angular_velocity()
-        accel = self.carla_actor.get_acceleration()
-        self.node.loginfo("location is {}, rotation is {}".format(transform.location, transform.rotation))
-        self.node.loginfo("linear_vel is is {}".format(linear_vel))
-        self.node.loginfo("angular_vel is is {}".format(angular_vel))
-        self.node.loginfo("accel is is {}".format(accel))
+        if not self.vehicle_loc_set:
+            self.vehicle_loc_set = True
+            self.node.loginfo("=========================================")
+            transform = self.carla_actor.get_transform()
+            linear_vel = self.carla_actor.get_velocity()
+            angular_vel = self.carla_actor.get_angular_velocity()
+            accel = self.carla_actor.get_acceleration()
+            self.node.loginfo("location is {}, rotation is {}".format(transform.location, transform.rotation))
+            self.node.loginfo("linear_vel is is {}".format(linear_vel))
+            self.node.loginfo("angular_vel is is {}".format(angular_vel))
+            self.node.loginfo("accel is is {}".format(accel))
 
-        spectator = self.world.get_spectator()
-        spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
+            spectator = self.world.get_spectator()
+            spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
 
-        # if not self.vehicle_localization_wrote:
-        #     self.vehicle_localization_wrote = True
-        localization_estimate = LocalizationEstimate()
-        localization_estimate.header.timestamp_sec = self.node.get_time()
-        localization_estimate.header.frame_id = 'novatel'
+            # if not self.vehicle_localization_wrote:
+            #     self.vehicle_localization_wrote = True
+            localization_estimate = LocalizationEstimate()
+            localization_estimate.header.timestamp_sec = self.node.get_time()
+            localization_estimate.header.frame_id = 'novatel'
 
-        cyber_pose = trans.carla_transform_to_cyber_pose(transform)
-        localization_estimate.pose.position.x = cyber_pose.position.x
-        localization_estimate.pose.position.y = cyber_pose.position.y
-        localization_estimate.pose.position.z = cyber_pose.position.z
-        self.node.loginfo("position.x is {}, position.y is {}, position.z is {}".format(
-            cyber_pose.position.x, cyber_pose.position.y, cyber_pose.position.z))
+            cyber_pose = trans.carla_transform_to_cyber_pose(transform)
+            localization_estimate.pose.position.x = cyber_pose.position.x
+            localization_estimate.pose.position.y = cyber_pose.position.y
+            localization_estimate.pose.position.z = cyber_pose.position.z
+            self.node.loginfo("position.x is {}, position.y is {}, position.z is {}".format(
+                cyber_pose.position.x, cyber_pose.position.y, cyber_pose.position.z))
 
-        localization_estimate.pose.orientation.qx = cyber_pose.orientation.qx
-        localization_estimate.pose.orientation.qy = cyber_pose.orientation.qy
-        localization_estimate.pose.orientation.qz = cyber_pose.orientation.qz
-        localization_estimate.pose.orientation.qw = cyber_pose.orientation.qw
-        self.node.loginfo("qx is {}, qy is {}, qz is {}, qw is {}".format(
-            cyber_pose.orientation.qx, cyber_pose.orientation.qy, cyber_pose.orientation.qz, cyber_pose.orientation.qw))
+            localization_estimate.pose.orientation.qx = cyber_pose.orientation.qx
+            localization_estimate.pose.orientation.qy = cyber_pose.orientation.qy
+            localization_estimate.pose.orientation.qz = cyber_pose.orientation.qz
+            localization_estimate.pose.orientation.qw = cyber_pose.orientation.qw
+            self.node.loginfo("qx is {}, qy is {}, qz is {}, qw is {}".format(
+                cyber_pose.orientation.qx, cyber_pose.orientation.qy, cyber_pose.orientation.qz, cyber_pose.orientation.qw))
 
-        cyber_twist = trans.carla_velocity_to_cyber_twist(linear_vel, angular_vel)
-        localization_estimate.pose.linear_velocity.x = cyber_twist.linear.x
-        localization_estimate.pose.linear_velocity.y = cyber_twist.linear.y
-        localization_estimate.pose.linear_velocity.z = cyber_twist.linear.z
+            cyber_twist = trans.carla_velocity_to_cyber_twist(linear_vel, angular_vel)
+            localization_estimate.pose.linear_velocity.x = cyber_twist.linear.x
+            localization_estimate.pose.linear_velocity.y = cyber_twist.linear.y
+            localization_estimate.pose.linear_velocity.z = cyber_twist.linear.z
 
-        localization_estimate.pose.angular_velocity.x = cyber_twist.angular.x
-        localization_estimate.pose.angular_velocity.y = cyber_twist.angular.y
-        localization_estimate.pose.angular_velocity.z = cyber_twist.angular.z
+            localization_estimate.pose.angular_velocity.x = cyber_twist.angular.x
+            localization_estimate.pose.angular_velocity.y = cyber_twist.angular.y
+            localization_estimate.pose.angular_velocity.z = cyber_twist.angular.z
 
-        cyber_line_accel = trans.carla_acceleration_to_cyber_accel(accel)
-        localization_estimate.pose.linear_acceleration.x = cyber_line_accel.linear.x
-        localization_estimate.pose.linear_acceleration.y = cyber_line_accel.linear.y
-        localization_estimate.pose.linear_acceleration.z = cyber_line_accel.linear.z
-        self.node.loginfo("\n cyber_twist.linear is {}, \n cyber_twist.angular is {}, \n cyber_line_accel is {}".format(
-            cyber_twist.linear, cyber_twist.angular, cyber_line_accel))
+            cyber_line_accel = trans.carla_acceleration_to_cyber_accel(accel)
+            localization_estimate.pose.linear_acceleration.x = cyber_line_accel.linear.x
+            localization_estimate.pose.linear_acceleration.y = cyber_line_accel.linear.y
+            localization_estimate.pose.linear_acceleration.z = cyber_line_accel.linear.z
+            self.node.loginfo("\n cyber_twist.linear is {}, \n cyber_twist.angular is {}, \n cyber_line_accel is {}".format(
+                cyber_twist.linear, cyber_twist.angular, cyber_line_accel))
 
-        roll, pitch, yaw = trans.cyber_quaternion_to_cyber_euler(cyber_pose.orientation)
-        self.node.loginfo("====roll is {}, pitch is {}, yaw is {}".format(roll, pitch, yaw))
-        # cyber_roll, cyber_pitch, cyber_yaw = trans.carla_rotation_to_RPY(transform.rotation)
-        # self.node.loginfo("++++roll is {}, pitch is {}, yaw is {}".format(cyber_roll, cyber_pitch, cyber_yaw))
+            roll, pitch, yaw = trans.cyber_quaternion_to_cyber_euler(cyber_pose.orientation)
+            self.node.loginfo("====roll is {}, pitch is {}, yaw is {}".format(roll, pitch, yaw))
+            # cyber_roll, cyber_pitch, cyber_yaw = trans.carla_rotation_to_RPY(transform.rotation)
+            # self.node.loginfo("++++roll is {}, pitch is {}, yaw is {}".format(cyber_roll, cyber_pitch, cyber_yaw))
 
-        enu_accel_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_line_accel.linear.x,
-                                                                   cyber_line_accel.linear.y,
-                                                                   cyber_line_accel.linear.z]))
-        localization_estimate.pose.linear_acceleration_vrf.x = enu_accel_velocity[0, 0]
-        localization_estimate.pose.linear_acceleration_vrf.y = enu_accel_velocity[0, 1]
-        localization_estimate.pose.linear_acceleration_vrf.z = enu_accel_velocity[0, 2]
+            enu_accel_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_line_accel.linear.x,
+                                                                       cyber_line_accel.linear.y,
+                                                                       cyber_line_accel.linear.z]))
+            localization_estimate.pose.linear_acceleration_vrf.x = enu_accel_velocity[0, 0]
+            localization_estimate.pose.linear_acceleration_vrf.y = enu_accel_velocity[0, 1]
+            localization_estimate.pose.linear_acceleration_vrf.z = enu_accel_velocity[0, 2]
 
-        enu_angular_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_twist.angular.x,
-                                                                     cyber_twist.angular.y,
-                                                                     cyber_twist.angular.z]))
-        localization_estimate.pose.angular_velocity_vrf.x = enu_angular_velocity[0, 0]
-        localization_estimate.pose.angular_velocity_vrf.y = enu_angular_velocity[0, 1]
-        localization_estimate.pose.angular_velocity_vrf.z = enu_angular_velocity[0, 2]
+            enu_angular_velocity = trans.n2b(pitch, roll, yaw, np.array([cyber_twist.angular.x,
+                                                                         cyber_twist.angular.y,
+                                                                         cyber_twist.angular.z]))
+            localization_estimate.pose.angular_velocity_vrf.x = enu_angular_velocity[0, 0]
+            localization_estimate.pose.angular_velocity_vrf.y = enu_angular_velocity[0, 1]
+            localization_estimate.pose.angular_velocity_vrf.z = enu_angular_velocity[0, 2]
 
-        localization_estimate.pose.heading = math.radians(-transform.rotation.yaw)
-        self.vehicle_pose_writer.write(localization_estimate)
+            localization_estimate.pose.heading = math.radians(-transform.rotation.yaw)
+            self.vehicle_pose_writer.write(localization_estimate)
 
-        localization_status = LocalizationStatus()
-        localization_status.header.timestamp_sec = self.node.get_time()
-        localization_status.fusion_status = 0  # OK = 0
-        localization_status.measurement_time = self.node.get_time()
-        localization_status.state_message = ""
-        self.localization_status_writer.write(localization_status)
+            localization_status = LocalizationStatus()
+            localization_status.header.timestamp_sec = self.node.get_time()
+            localization_status.fusion_status = 0  # OK = 0
+            localization_status.measurement_time = self.node.get_time()
+            localization_status.state_message = ""
+            self.localization_status_writer.write(localization_status)
+
+            self.first_flag = False
 
         tf_stampeds = TransformStampeds()
         tf_stampeds.transforms.append(self.get_tf_msg())
