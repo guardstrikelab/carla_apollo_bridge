@@ -1,0 +1,10 @@
+module_config {
+    module_library : "/apollo/bazel-bin/modules/monitor/libmonitor.so"
+    timer_components {
+        class_name : "Monitor"
+        config {
+            name: "monitor"
+            interval: 500
+        }
+    }
+}

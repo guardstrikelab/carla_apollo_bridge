@@ -1,0 +1,6 @@
+name : "MKZ"
+brand : LINCOLN
+model : MKZ
+vehicle_id {
+    vin : "<VIN>"
+}
