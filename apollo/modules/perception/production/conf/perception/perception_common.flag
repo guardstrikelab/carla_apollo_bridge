@@ -71,7 +71,7 @@
 # query Cyber TF buffer size in second.
 # type: double
 # default: 0.01
---obs_tf2_buff_size=0.01
+--obs_tf2_buff_size=0.1
 
 # enabled state of local pose extrapolation when failed to query pose
 # type: bool
