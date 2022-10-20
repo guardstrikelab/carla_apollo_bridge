@@ -131,9 +131,10 @@ class Camera(Sensor):
         cam_img.measurement_time = cam_img.header.timestamp_sec
         cam_img.height = image_data_array.shape[0]
         cam_img.width = image_data_array.shape[1]
-        cam_img.encoding = 'BAYER_RGGB8'
+        #cam_img.encoding = 'BAYER_RGGB8'
+        cam_img.encoding = 'rgb8'
         cam_img.data = cv2.imencode('.jpg', image_data_array)[1].tostring()
-        self.camera_image_writer.write(cam_img)
+        # self.camera_image_writer.write(cam_img)
 
         cam_compressed_img = CompressedImage()
         cam_compressed_img.header.CopyFrom(self.parent.get_msg_header())
