@@ -260,7 +260,6 @@ void RTKLocalization::ComposeLocalizationMsg(
           pose.orientation().qw(), pose.orientation().qx(),
           pose.orientation().qy(), pose.orientation().qz());
       mutable_pose->set_heading(heading - M_PI_2);
-      ADEBUG << "computing HEADING " << heading;
     }
     // linear velocity
     if (pose.has_linear_velocity()) {
@@ -316,7 +315,6 @@ void RTKLocalization::ComposeLocalizationMsg(
 
     // euler angle
     if (imu.has_euler_angles()) {
-      AERROR << "has_euler_angles";
       mutable_pose->mutable_euler_angles()->CopyFrom(imu.euler_angles());
     }
   }

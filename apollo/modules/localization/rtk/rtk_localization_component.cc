@@ -17,7 +17,6 @@
 #include "modules/localization/rtk/rtk_localization_component.h"
 #include "cyber/time/clock.h"
 
-
 namespace apollo {
 namespace localization {
 
@@ -52,7 +51,6 @@ bool RTKLocalizationComponent::InitConfig() {
   imu_topic_ = rtk_config.imu_topic();
   gps_topic_ = rtk_config.gps_topic();
   gps_status_topic_ = rtk_config.gps_status_topic();
-  AERROR << gps_status_topic_;
   broadcast_tf_frame_id_ = rtk_config.broadcast_tf_frame_id();
   broadcast_tf_child_frame_id_ = rtk_config.broadcast_tf_child_frame_id();
 
@@ -75,6 +73,7 @@ bool RTKLocalizationComponent::InitIO() {
   localization_talker_ =
       node_->CreateWriter<LocalizationEstimate>(localization_topic_);
   ACHECK(localization_talker_);
+
   localization_status_talker_ =
       node_->CreateWriter<LocalizationStatus>(localization_status_topic_);
   ACHECK(localization_status_talker_);
@@ -127,15 +126,7 @@ void RTKLocalizationComponent::PublishPoseBroadcastTF(
 
 void RTKLocalizationComponent::PublishPoseBroadcastTopic(
     const LocalizationEstimate& localization) {
-  ADEBUG << localization.pose().heading();
-  if (std::isnan(localization.pose().position().x())
-  || std::isnan(localization.pose().position().y())
-  || std::isnan(localization.pose().position().z()))
-  {
-      return;
-  }
   localization_talker_->Write(localization);
-  
 }
 
 void RTKLocalizationComponent::PublishLocalizationStatus(

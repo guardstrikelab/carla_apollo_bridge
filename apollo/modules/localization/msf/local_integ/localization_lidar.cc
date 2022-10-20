@@ -59,8 +59,7 @@ bool LocalizationLidar::Init(const std::string& map_path,
   resolution_id_ = resolution_id;
   zone_id_ = zone_id;
   if (!map_.SetMapFolderPath(map_path)) {
-    LOG(FATAL) << "Reflectance map folder is invalid!123";
-    // LOG(FATAL) << map_path;
+    LOG(FATAL) << "Reflectance map folder is invalid!";
     return false;
   }
   map_node_pool_.Initial(&(map_.GetMapConfig()));
