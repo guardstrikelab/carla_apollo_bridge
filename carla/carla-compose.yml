@@ -19,7 +19,7 @@ services:
             - "2002:2002"
 
         runtime: nvidia
-        command: ./CarlaUE4.sh  -quality-level=Low -carla-rpc-port=2000
+        command: ./CarlaUE4.sh  -quality-level=Low -opengl -carla-rpc-port=2000
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix:rw
             - /etc/localtime:/etc/localtime
