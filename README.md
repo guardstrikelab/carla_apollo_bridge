@@ -171,9 +171,9 @@ python carla_spawn_objects/carla_spawn_objects.py
 
 # 鸣谢
 备注：该联合仿真是在以下基础上改动的，在此表示感谢。
-[https://github.com/casper-auto/carla-apollo](https://github.com/casper-auto/carla-apollo)
-[https://github.com/AuroAi/carla_apollo_bridge](https://github.com/AuroAi/carla_apollo_bridge)
-[https://github.com/ApolloAuto/apollo](https://github.com/ApolloAuto/apollo)
++ [https://github.com/casper-auto/carla-apollo](https://github.com/casper-auto/carla-apollo)
++ [https://github.com/AuroAi/carla_apollo_bridge](https://github.com/AuroAi/carla_apollo_bridge)
++ [https://github.com/ApolloAuto/apollo](https://github.com/ApolloAuto/apollo)
 
 
 
