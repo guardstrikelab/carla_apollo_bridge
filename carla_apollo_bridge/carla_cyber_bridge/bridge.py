@@ -55,14 +55,7 @@ from cyber.carla_bridge.carla_proto.proto.carla_get_blueprints_pb2 import (
     GetBlueprintsResponse
 )
 from cyber.carla_bridge.carla_proto.proto.carla_weather_parameters_pb2 import CarlaWeatherParameters
-from modules.localization.proto.localization_pb2 import LocalizationEstimate, LocalizationStatus
-from modules.transform.proto.transform_pb2 import TransformStamped, TransformStampeds
-import math
-import carla_common.transforms as trans
-from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import Twist, Accel
-from modules.common.proto.geometry_pb2 import Point3D
-import json
-import numpy as np
+
 
 class CarlaCyberBridge(CompatibleNode):
 
@@ -97,9 +90,6 @@ class CarlaCyberBridge(CompatibleNode):
 
         self.synchronous_mode_update_thread = None
         self.shutdown = Event()
-        self.carla_actor = None
-        self.carla_tick_count = 0
-        self.find_car = False
 
         self.carla_settings = carla_world.get_settings()
         if not self.parameters["passive"]:
@@ -197,19 +187,6 @@ class CarlaCyberBridge(CompatibleNode):
         self.carla_weather_reader = self.new_reader("/carla/weather_control",
                                                     CarlaWeatherParameters,
                                                     self.on_weather_changed)
-
-        self.vehicle_pose_writer = self.new_writer(
-            "/apollo/localization/pose",
-            LocalizationEstimate,
-            qos_depth=10)
-        self.localization_status_writer = self.new_writer(
-            "/apollo/localization/msf_status",
-            LocalizationStatus,
-            qos_depth=10)
-
-        self.tf_writer = self.new_writer("/tf", TransformStampeds)
-
-
         self.logdebug("carla_weather_reader.")
 
     def spawn_object(self, req):
@@ -302,7 +279,6 @@ class CarlaCyberBridge(CompatibleNode):
         """
         execution loop for synchronous mode
         """
-        last_car_pos = 0
         while not self.shutdown.is_set():
             self.process_run_state()
             if self.parameters['synchronous_mode_wait_for_vehicle_control_command']:
@@ -314,7 +290,9 @@ class CarlaCyberBridge(CompatibleNode):
                             self._expected_ego_vehicle_control_command_ids.append(
                                 actor_id)
                             self.loginfo("actor_id is {}".format(actor_id))
+
             frame = self.carla_world.tick()
+
             world_snapshot = self.carla_world.get_snapshot()
 
             self.status_writer.set_frame(frame)
@@ -333,10 +311,6 @@ class CarlaCyberBridge(CompatibleNode):
                                      "Missing command from actor ids {}".format(CarlaCyberBridge.VEHICLE_CONTROL_TIMEOUT,
                                                                                 self._expected_ego_vehicle_control_command_ids))
                     self._all_vehicle_control_commands_received.clear()
-
-
-
-
 
     def _carla_time_tick(self, carla_snapshot):
         """
@@ -485,12 +459,6 @@ def main(args=None):
 
         carla_bridge.initialize_bridge(carla_world, parameters)
         # carla_bridge.initialize_bridge(carla_client.get_world(), parameters)
-
-
-        spectator = carla_world.get_spectator()
-        ego_vehicle = carla_world.get_actor(258)
-        loc = ego_vehicle.get_transform().location
-        spectator.set_transform(carla.Transform(carla.Location(x=loc.x,y=loc.y,z=35),carla.Rotation(yaw=0,pitch=-90,roll=0)))
 
         carla_bridge.loginfo("spin ...")
         carla_bridge.spin()

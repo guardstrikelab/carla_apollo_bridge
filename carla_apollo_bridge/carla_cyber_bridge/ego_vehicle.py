@@ -103,7 +103,6 @@ class EgoVehicle(Vehicle):
 
 
 
-
     def get_marker_color(self):
         """
         Function (override) to return the color for marker messages.
@@ -205,6 +204,10 @@ class EgoVehicle(Vehicle):
             vehicle_info.center_of_mass.z = vehicle_physics.center_of_mass.z
 
             self.vehicle_info_writer.write(vehicle_info)
+
+        transform = self.carla_actor.get_transform()
+        spectator = self.world.get_spectator()
+        spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
 
         '''
         Mock locaization estimate.
