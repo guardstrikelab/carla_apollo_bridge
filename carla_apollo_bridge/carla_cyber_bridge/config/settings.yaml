@@ -7,8 +7,6 @@ carla:
   passive: False
   synchronous_mode: True
   synchronous_mode_wait_for_vehicle_control_command: False
-  #fixed_delta_seconds: 0.05
-  #fixed_delta_seconds: 0.05
   fixed_delta_seconds: 0.05
   register_all_sensors: True
   town: 'Town01'
