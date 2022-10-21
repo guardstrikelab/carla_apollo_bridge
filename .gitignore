@@ -11,18 +11,18 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+#build/
 develop-eggs/
 # dist/
 downloads/
 # eggs/
 # .eggs/
-lib/
-lib64/
-parts/
+#lib/
+#lib64/
+#parts/
 sdist/
-var/
-wheels/
+#var/
+#wheels/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
@@ -42,27 +42,27 @@ pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
+#.tox/
+#.nox/
+#.coverage
+#.coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*.cover
-*.py,cover
+#*.cover
+#*.py,cover
 .hypothesis/
 .pytest_cache/
 
 # Translations
-*.mo
-*.pot
+#*.mo
+#*.pot
 
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
+#db.sqlite3
+#db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -105,11 +105,11 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.venv
-env/
-venv/
-ENV/
+#.env
+#.venv
+#env/
+#venv/
+#ENV/
 env.bak/
 venv.bak/
 
