@@ -1,0 +1,3 @@
+[submodule "apollo"]
+	path = apollo
+	url = git@github.com:ApolloAuto/apollo.git
