@@ -101,16 +101,14 @@ Alternatively, simply perform the following steps：
 * Refer to this link：
 <br> https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
-1. Clone the apollo repo and apollo-carla bridge repo
-
+1. Clone the apollo repo
    ```sh
    # Using SSH
-   git clone git@github.com:guardstrikelab/apollo_carla.git
+   git clone git@github.com:guardstrikelab/apollo.git
 
    #Using HTTPS
-   git clone https://github.com/guardstrikelab/apollo_carla.git
+   git clone https://github.com/guardstrikelab/apollo.git
    ```
-
 2. Build Apollo
 
    ```sh
@@ -130,8 +128,46 @@ Alternatively, simply perform the following steps：
    sudo rm -rf /apollo/.cache
    bash docker/scripts/dev_start.sh
    ```
+   After the execution is successful, there will be the following output
+   ```sh
+   [ OK ] Congratulations! You have successfully finished setting up Apollo Dev Environment.
+   [ OK ] To login into the newly created apollo_dev_lei container, please run the following command:
+   [ OK ]   bash docker/scripts/dev_into.sh
+   [ OK ] Enjoy!
+   ```
+   Run the command and enter the container:
+   ```sh
+   bash docker/scripts/dev_into.sh
+   ```
+   Make the GPU version:
+   ```sh
+   ./apollo.sh build_gpu
+   ```
+   After successful compilation, the following will be printed:
+   ```sh
+   ==============================================
+   [ OK ] Done building apollo. Enjoy!
+   ==============================================
+   ```
+   Run the command in the container:
+   ```sh
+   ./scripts/bootstrap.sh
+   ```
+   Finnaly, open the link in your browser:
+   ```sh
+   http://localhost:8888/
+   ```
 
 ### Run Carla
+* Clone apollo_carla_bridge project:
+   ```sh
+   # Using SSH
+   git clone git@github.com:guardstrikelab/apollo_carla_bridge.git
+
+   #Using HTTPS
+   git clone https://github.com/guardstrikelab/apollo_carla_bridge.git
+   ```
+
 * Install docker-compose
 
    ```sh
@@ -202,7 +238,7 @@ Alternatively, simply perform the following steps：
     ```
 
 
-## Usage
+<!-- ## Usage -->
 
 
 <!-- ROADMAP -->
