@@ -101,21 +101,18 @@ Alternatively, simply perform the following steps：
 * Refer to this link：
 <br> https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
-1. Clone the apollo repo
+1. Clone the apollo repo, please use guardstrike/apollo_carla_bridge branch
    ```sh
    # Using SSH
-   git clone git@github.com:guardstrikelab/apollo.git
+   git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
 
    #Using HTTPS
-   git clone https://github.com/guardstrikelab/apollo.git
+   git clone --branch guardstrike/apollo_carla_bridge https://github.com/guardstrikelab/apollo.git
    ```
 2. Build Apollo
 
    ```sh
    cd apollo
-   git checkout master
-   ```
-   ```sh
    echo "export APOLLO_ROOT_DIR=$(pwd)" >> ~/.bashrc  && source ~/.bashrc
    ```
    Then, run:
