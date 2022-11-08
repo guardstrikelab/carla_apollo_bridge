@@ -8,7 +8,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h1 align="center">Carla Apollo Bridge</h1>
+  <h1 align="center">Apollo Carla Bridge</h1>
 
   <p align="center">
     <b>Apollo & Carla Co-simulation</b>
@@ -176,16 +176,15 @@ Alternatively, simply perform the following steps：
 * Pull carla image and run
   
    ```sh
-   cd apollo_carla/carla
-   xhost +
+   cd apollo_carla_bridge/scripts
    ./docker_run_carla.sh
    ```
 
 <!-- USAGE EXAMPLES -->
-## Run Carla_apollo_bridge
+## Run apollo_carla_bridge
 1.  Run and enter docker
     ```sh
-    cd apollo_carla/carla_apollo_bridge/docker
+    cd apollo_carla_bridge/docker
     ./build_docker.sh
     ./run_docker.sh
     docker exec -ti carla_cyber_0.9.13 bash
