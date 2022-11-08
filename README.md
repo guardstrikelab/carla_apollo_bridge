@@ -183,36 +183,17 @@ Alternatively, simply perform the following steps：
 
 <!-- USAGE EXAMPLES -->
 ## Run Carla_apollo_bridge
-1.  Run docker
+1.  Run and enter docker
     ```sh
     cd apollo_carla/carla_apollo_bridge/docker
     ./build_docker.sh
     ./run_docker.sh
-    ```
-2.  Config
-    
-    To query the IP address of carla_cyber_0.9.13 container, run the following command outside the container:
-    ```sh
-    docker inspect carla_cyber_0.9.13 | grep IPAddress
-    ```
-    Then enter the container:
-    ```sh
     docker exec -ti carla_cyber_0.9.13 bash
-    vi /apollo/cyber/setup.bash
     ```
-    Change the IP address in the bash file to the IP address of the local de container, that is, the IP address obtained above:
-    ```sh
-    export CYBER_IP=172.17.0.2
-    ```
-    Update the environment variable in the container:
-    ```sh
-    source ~/.bashrc
-    ```
-3.  Compile
-    
+2.  Compile
+
     Run the following command in the container:
     ```sh
-    rm -rf /root/.cache/*
     ./apollo.sh build_cyber opt
     ```
     The following information is displayed after the compilation is successful:
@@ -222,7 +203,7 @@ Alternatively, simply perform the following steps：
     [ OK ] Build passed!
     [INFO] Took 61 seconds
     ```
-4. Run
+3. Run
 
     Run the following command in the container.
 
