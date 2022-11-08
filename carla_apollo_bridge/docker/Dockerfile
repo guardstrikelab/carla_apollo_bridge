@@ -20,3 +20,10 @@ RUN echo "source /apollo/cyber/setup.bash" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:\$CARLA_PYTHON_ROOT/carla/dist/carla-0.9.13-py2.7-linux-x86_64.egg" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:\$CARLA_PYTHON_ROOT/carla" >> ~/.bashrc && \
     echo "" >> ~/.bashrc
+COPY setup.bash /apollo/cyber/
+
+RUN rm -rf /root/.cache/*
+# RUN /bin/bash -c "source /root/.bashrc"
+# RUN /apollo/apollo.sh build_cyber opt
+
+CMD /bin/bash -c "source /root/.bashrc"
