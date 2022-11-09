@@ -178,7 +178,7 @@ Alternatively, simply perform the following steps：
    ```
 
 <!-- USAGE EXAMPLES -->
-## Run apollo_carla_bridge
+### Run apollo_carla_bridge
 1.  Run and enter docker
     ```sh
     cd apollo_carla_bridge/docker
@@ -202,20 +202,37 @@ Alternatively, simply perform the following steps：
 3. Run
 
     Run the following command in the container.
-
-    In terminal 1:
     ```sh
     cd /apollo/cyber/carla_bridge
     python carla_cyber_bridge/bridge.py
     ```
-    In terminal 2:
+    Start a new terminal and run:
     ```sh
+    docker exec -ti carla_cyber_0.9.13 bash
     cd /apollo/cyber/carla_bridge
     python carla_spawn_objects/carla_spawn_objects.py
     ```
 
+### Result
+If you successfully built and ran, you should see this in Apollo client: 
+ 
+![image](docs/images/Apollo.png)
 
-<!-- ## Usage -->
+and this in Carla:
+
+![image](docs/images/CarlaUE4.png)
+
+
+## Usage
+1. Open apollo client: http://localhost:8888
+2. (Optional) Select "Task" in the sidebar and turn on "Camera Sensor" in "Others".
+3. (Optional) Select "Layer Menu" in the sidebar and turn on "Point Cloud" in "Perception".
+4. Select "Module Controller" in the sidebar and turn on "Routing" module.
+5. Select "Route Editing" in the sidebar.
+6. Click "Add Point of Interest" and left click at any point on the road to set the destination.
+7. Click "Send Routing Request".
+8. Select "Tasks" and click "Setup" to start co-simulation.
+
 
 
 <!-- ROADMAP -->
