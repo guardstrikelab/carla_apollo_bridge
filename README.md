@@ -213,6 +213,15 @@ Alternatively, simply perform the following steps：
     python carla_spawn_objects/carla_spawn_objects.py
     ```
 
+### Result
+If you successfully built and ran, you should see this in Apollo client: 
+ 
+![image](docs/images/Apollo.png)
+
+and this in Carla:
+
+![image](docs/images/CarlaUE4.png)
+
 
 ## Usage
 1. Open apollo client: http://localhost:8888
