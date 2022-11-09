@@ -8,7 +8,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h1 align="center">Carla Apollo Bridge</h1>
+  <h1 align="center">Apollo Carla Bridge</h1>
 
   <p align="center">
     <b>Apollo & Carla Co-simulation</b>
@@ -101,21 +101,18 @@ Alternatively, simply perform the following steps：
 * Refer to this link：
 <br> https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
-1. Clone the apollo repo
+1. Clone the apollo repo, please use guardstrike/apollo_carla_bridge branch
    ```sh
    # Using SSH
-   git clone git@github.com:guardstrikelab/apollo.git
+   git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
 
    #Using HTTPS
-   git clone https://github.com/guardstrikelab/apollo.git
+   git clone --branch guardstrike/apollo_carla_bridge https://github.com/guardstrikelab/apollo.git
    ```
 2. Build Apollo
 
    ```sh
    cd apollo
-   git checkout master
-   ```
-   ```sh
    echo "export APOLLO_ROOT_DIR=$(pwd)" >> ~/.bashrc  && source ~/.bashrc
    ```
    Then, run:
@@ -176,16 +173,15 @@ Alternatively, simply perform the following steps：
 * Pull carla image and run
   
    ```sh
-   cd apollo_carla/carla
-   xhost +
+   cd apollo_carla_bridge/scripts
    ./docker_run_carla.sh
    ```
 
 <!-- USAGE EXAMPLES -->
-## Run Carla_apollo_bridge
+## Run apollo_carla_bridge
 1.  Run and enter docker
     ```sh
-    cd apollo_carla/carla_apollo_bridge/docker
+    cd apollo_carla_bridge/docker
     ./build_docker.sh
     ./run_docker.sh
     docker exec -ti carla_cyber_0.9.13 bash

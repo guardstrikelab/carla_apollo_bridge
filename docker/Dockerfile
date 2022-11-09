@@ -26,4 +26,4 @@ RUN rm -rf /root/.cache/*
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN /apollo/apollo.sh build_cyber opt
 
-CMD /bin/bash -c "source /root/.bashrc"
+CMD /bin/bash -c "source /root/.bashrc" && sleep infinity
