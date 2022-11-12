@@ -8,10 +8,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h1 align="center">Apollo Carla Bridge</h1>
+  <h1 align="center">Carla Apollo Bridge</h1>
 
   <p align="center">
-    <b>Apollo & Carla Co-simulation</b>
+    <b>Carla & Apollo Co-simulation</b>
     <!-- <br /> -->
     <!-- <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
     <br /> -->
@@ -56,7 +56,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About Carla Apollo Bridge
-Carla Apollo Bridge aims to provide a bridge for communicating between the latest version of Apollo and Carla. It was tested with Carla 0.9.13 and Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
+Carla Apollo Bridge aims to provide a data and control bridge for the communication between the latest version of Carla and Apollo. It was tested with Carla 0.9.13 and Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -101,7 +101,7 @@ Alternatively, simply perform the following steps：
 * Refer to this link：
 <br> https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
-1. Clone the apollo repo, please use guardstrike/apollo_carla_bridge branch
+1. Clone the Apollo repo, please use guardstrike/apollo_carla_bridge branch
    ```sh
    # Using SSH
    git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
