@@ -39,7 +39,6 @@ from modules.transform.proto.transform_pb2 import TransformStamped, TransformSta
 
 
 class EgoVehicle(Vehicle):
-
     """
     Vehicle implementation details for the ego vehicle
     """
@@ -100,8 +99,6 @@ class EgoVehicle(Vehicle):
             self.get_topic_prefix() + "/enable_autopilot",
             BoolResult,
             self.enable_autopilot_updated)
-
-
 
     def get_marker_color(self):
         """
@@ -176,10 +173,10 @@ class EgoVehicle(Vehicle):
                 wheel_info.max_handbrake_torque = wheel.max_handbrake_torque
 
                 inv_T = np.array(self.carla_actor.get_transform().get_inverse_matrix(), dtype=float)
-                wheel_pos_in_map = np.array([wheel.position.x/100.0,
-                                        wheel.position.y/100.0,
-                                        wheel.position.z/100.0,
-                                        1.0])
+                wheel_pos_in_map = np.array([wheel.position.x / 100.0,
+                                             wheel.position.y / 100.0,
+                                             wheel.position.z / 100.0,
+                                             1.0])
                 wheel_pos_in_ego_vehicle = np.matmul(inv_T, wheel_pos_in_map)
                 wheel_info.position.x = wheel_pos_in_ego_vehicle[0]
                 wheel_info.position.y = -wheel_pos_in_ego_vehicle[1]
@@ -207,7 +204,13 @@ class EgoVehicle(Vehicle):
 
         transform = self.carla_actor.get_transform()
         spectator = self.world.get_spectator()
-        spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
+        print("vehicle location {},{}".format(-10 * math.radians(math.cos(transform.rotation.yaw)),
+                                              -10 * math.radians(math.sin(transform.rotation.yaw))))
+        spectator.set_transform(
+            carla.Transform(transform.location + carla.Location(x=-10 * math.cos(math.radians(transform.rotation.yaw)),
+                                                                y=-10 * math.sin(math.radians(transform.rotation.yaw)),
+                                                                z=15),
+                            carla.Rotation(pitch=-30, yaw=transform.rotation.yaw)))
 
         '''
         Mock locaization estimate.
@@ -225,7 +228,12 @@ class EgoVehicle(Vehicle):
             self.node.loginfo("accel is is {}".format(accel))
 
             spectator = self.world.get_spectator()
-            spectator.set_transform(carla.Transform(transform.location + carla.Location(z=15), carla.Rotation(pitch=-90)))
+            spectator.set_transform(
+                carla.Transform(
+                    transform.location + carla.Location(x=-10 * math.cos(math.radians(transform.rotation.yaw)),
+                                                        y=-10 * math.sin(math.radians(transform.rotation.yaw)),
+                                                        z=15),
+                    carla.Rotation(pitch=-30, yaw=transform.rotation.yaw)))
 
             # if not self.vehicle_localization_wrote:
             #     self.vehicle_localization_wrote = True
@@ -245,7 +253,8 @@ class EgoVehicle(Vehicle):
             localization_estimate.pose.orientation.qz = cyber_pose.orientation.qz
             localization_estimate.pose.orientation.qw = cyber_pose.orientation.qw
             self.node.loginfo("qx is {}, qy is {}, qz is {}, qw is {}".format(
-                cyber_pose.orientation.qx, cyber_pose.orientation.qy, cyber_pose.orientation.qz, cyber_pose.orientation.qw))
+                cyber_pose.orientation.qx, cyber_pose.orientation.qy, cyber_pose.orientation.qz,
+                cyber_pose.orientation.qw))
 
             cyber_twist = trans.carla_velocity_to_cyber_twist(linear_vel, angular_vel)
             localization_estimate.pose.linear_velocity.x = cyber_twist.linear.x
@@ -260,8 +269,9 @@ class EgoVehicle(Vehicle):
             localization_estimate.pose.linear_acceleration.x = cyber_line_accel.linear.x
             localization_estimate.pose.linear_acceleration.y = cyber_line_accel.linear.y
             localization_estimate.pose.linear_acceleration.z = cyber_line_accel.linear.z
-            self.node.loginfo("\n cyber_twist.linear is {}, \n cyber_twist.angular is {}, \n cyber_line_accel is {}".format(
-                cyber_twist.linear, cyber_twist.angular, cyber_line_accel))
+            self.node.loginfo(
+                "\n cyber_twist.linear is {}, \n cyber_twist.angular is {}, \n cyber_line_accel is {}".format(
+                    cyber_twist.linear, cyber_twist.angular, cyber_line_accel))
 
             roll, pitch, yaw = trans.cyber_quaternion_to_cyber_euler(cyber_pose.orientation)
             self.node.loginfo("====roll is {}, pitch is {}, yaw is {}".format(roll, pitch, yaw))
@@ -375,8 +385,8 @@ class EgoVehicle(Vehicle):
         :rtype: float64
         """
         return carla_vector.x * carla_vector.x + \
-            carla_vector.y * carla_vector.y + \
-            carla_vector.z * carla_vector.z
+               carla_vector.y * carla_vector.y + \
+               carla_vector.z * carla_vector.z
 
     @staticmethod
     def get_vehicle_speed_squared(carla_vehicle):
