@@ -210,7 +210,7 @@ class EgoVehicle(Vehicle):
             carla.Transform(transform.location + carla.Location(x=-10 * math.cos(math.radians(transform.rotation.yaw)),
                                                                 y=-10 * math.sin(math.radians(transform.rotation.yaw)),
                                                                 z=15),
-                            carla.Rotation(pitch=-30, yaw=transform.rotation.yaw)))
+                            carla.Rotation(pitch=-45, yaw=transform.rotation.yaw)))
 
         '''
         Mock locaization estimate.
@@ -233,7 +233,7 @@ class EgoVehicle(Vehicle):
                     transform.location + carla.Location(x=-10 * math.cos(math.radians(transform.rotation.yaw)),
                                                         y=-10 * math.sin(math.radians(transform.rotation.yaw)),
                                                         z=15),
-                    carla.Rotation(pitch=-30, yaw=transform.rotation.yaw)))
+                    carla.Rotation(pitch=-45, yaw=transform.rotation.yaw)))
 
             # if not self.vehicle_localization_wrote:
             #     self.vehicle_localization_wrote = True
