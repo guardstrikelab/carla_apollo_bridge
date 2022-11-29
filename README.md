@@ -58,6 +58,8 @@
 ## About Carla Apollo Bridge
 Carla Apollo Bridge aims to provide a data and control bridge for the communication between the latest version of Carla and Apollo. It was tested with Carla 0.9.13 and Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
 
+![image](docs/images/demo.gif)
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
