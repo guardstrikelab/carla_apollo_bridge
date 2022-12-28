@@ -8,7 +8,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h1 align="center">Carla Apollo Bridge</h1>
+  <h1 align="center">carla_apollo_bridge</h1>
 
   <p align="center">
     <b>Carla & Apollo Co-simulation</b>
@@ -55,8 +55,8 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About Carla Apollo Bridge
-Carla Apollo Bridge aims to provide a data and control bridge for the communication between the latest version of Carla and Apollo. It was tested with Carla 0.9.13 and Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
+## About
+This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with Carla 0.9.13 and the Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
 
 ![image](docs/images/demo.gif)
 
@@ -101,9 +101,9 @@ Alternatively, simply perform the following steps：
 ### Build And Run Apollo
 
 * Refer to this link：
-<br> https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
+<br> https://github.com/ApolloAuto/apollo/blob/master/docs/01_Installation%20Instructions/apollo_software_installation_guide.md
 
-1. Clone the Apollo repo, please use guardstrike/apollo_carla_bridge branch
+1. We patched Apollo in order to work with our bridge, for now please use the guardstrike/apollo_carla_bridge branch from our fork. 
    ```sh
    # Using SSH
    git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
@@ -111,6 +111,8 @@ Alternatively, simply perform the following steps：
    #Using HTTPS
    git clone --branch guardstrike/apollo_carla_bridge https://github.com/guardstrikelab/apollo.git
    ```
+   We will be sending this patch upstream soon so that you can just clone the official Apollo next time.
+
 2. Build Apollo
 
    ```sh
@@ -122,19 +124,19 @@ Alternatively, simply perform the following steps：
    bash docker/scripts/dev_start.sh
    ```
    to start Apollo development Docker container.
-   <br>If you encountered an error, try:
+   <br>If you encounter any error, try
    ```sh
    sudo rm -rf /apollo/.cache
    bash docker/scripts/dev_start.sh
    ```
-   After the execution is successful, there will be the following output
+   Upon successful execution, you will see the following message
    ```sh
    [ OK ] Congratulations! You have successfully finished setting up Apollo Dev Environment.
    [ OK ] To login into the newly created apollo_dev_lei container, please run the following command:
    [ OK ]   bash docker/scripts/dev_into.sh
    [ OK ] Enjoy!
    ```
-   Run the command and enter the container:
+   Run this command to enter the container
    ```sh
    bash docker/scripts/dev_into.sh
    ```
@@ -148,23 +150,23 @@ Alternatively, simply perform the following steps：
    [ OK ] Done building apollo. Enjoy!
    ==============================================
    ```
-   Run the command in the container:
+   Run this command in the container to start Dreamview
    ```sh
    ./scripts/bootstrap.sh
    ```
-   Finnaly, open the link in your browser:
+   Finally, open the link in your browser
    ```sh
    http://localhost:8888/
    ```
 
 ### Run Carla
-* Clone apollo_carla_bridge project:
+* Clone the carla_apollo_bridge project
    ```sh
    # Using SSH
-   git clone git@github.com:guardstrikelab/apollo_carla_bridge.git
+   git clone git@github.com:guardstrikelab/carla_apollo_bridge.git
 
    #Using HTTPS
-   git clone https://github.com/guardstrikelab/apollo_carla_bridge.git
+   git clone https://github.com/guardstrikelab/carla_apollo_bridge.git
    ```
 
 * Install docker-compose
@@ -175,22 +177,22 @@ Alternatively, simply perform the following steps：
 * Pull carla image and run
   
    ```sh
-   cd apollo_carla_bridge/scripts
+   cd carla_apollo_bridge/scripts
    ./docker_run_carla.sh
    ```
 
 <!-- USAGE EXAMPLES -->
-### Run apollo_carla_bridge
-1.  Run and enter docker
+### Run carla_apollo_bridge
+1.  Run the following to enter the container. Note that `carla_apollo_bridge/src` is mapped to `/apollo/cyber/carla_bridge` within the container, this allows you to test any change you make to the bridge. 
     ```sh
-    cd apollo_carla_bridge/docker
+    cd carla_apollo_bridge/docker
     ./build_docker.sh
     ./run_docker.sh
     docker exec -ti carla_cyber_0.9.13 bash
     ```
 2.  Compile
 
-    Run the following command in the container:
+    Run the following command in the container
     ```sh
     ./apollo.sh build_cyber opt
     ```
@@ -201,7 +203,7 @@ Alternatively, simply perform the following steps：
     [ OK ] Build passed!
     [INFO] Took 61 seconds
     ```
-3. Run
+3. Start the bridge and spawn the ego vehicle
 
     Run the following command in the container.
     ```sh
@@ -216,7 +218,7 @@ Alternatively, simply perform the following steps：
     ```
 
 ### Result
-If you successfully built and ran, you should see this in Apollo client: 
+If everything above goes well, you should see this in Apollo client: 
  
 ![image](docs/images/Apollo.png)
 
@@ -225,7 +227,7 @@ and this in Carla:
 ![image](docs/images/CarlaUE4.png)
 
 
-## Usage
+## Example: start a co-simulation
 1. Open apollo client: http://localhost:8888
 2. (Optional) Select "Task" in the sidebar and turn on "Camera Sensor" in "Others".
 3. (Optional) Select "Layer Menu" in the sidebar and turn on "Point Cloud" in "Perception".
@@ -249,9 +251,9 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+## Contribution
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contribution you make is **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -266,9 +268,8 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the Apache-2.0 License. See `LICENSE.txt` for more information.
+Distributed under the Apache-2.0 License. See `LICENSE` for more information.
 
-In addition, We have kept the LICENSE of project [Carla Apollo Bridge](https://github.com/AuroAi/carla_apollo_bridge) in carla_apollo_bridge directory.
 
 
 
@@ -286,7 +287,7 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-The co-simulation is modified on the basis of the following, thank you here.
+This work is based on the following open-source projects,
 
 * [Apollo](https://github.com/ApolloAuto/apollo)
 * [Carla Apollo Bridge](https://github.com/AuroAi/carla_apollo_bridge)
