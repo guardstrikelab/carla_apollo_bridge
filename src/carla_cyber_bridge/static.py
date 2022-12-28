@@ -7,7 +7,7 @@
 # For a copy, see <https://opensource.org/licenses/MIT>.
 #
 """
-Classes to handle Carla statics
+Classes to handle Carla static obstacles
 """
 
 from carla_cyber_bridge.traffic_participant import TrafficParticipant
@@ -19,7 +19,7 @@ from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle
 class Static(TrafficParticipant):
 
     """
-    Actor implementation details for vehicles
+    Actor implementation details for static obstacles
     """
 
     def __init__(self, uid, name, parent, node, carla_actor):
@@ -34,8 +34,8 @@ class Static(TrafficParticipant):
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
         :type node: carla_cyber_bridge.CarlaCyberBridge
-        :param carla_actor: carla vehicle actor object
-        :type carla_actor: carla.Vehicle
+        :param carla_actor: carla actor object
+        :type carla_actor: carla.Actor
         """
         self.classification = PerceptionObstacle.UNKNOWN_UNMOVABLE
         super(Static, self).__init__(uid=uid,
@@ -48,7 +48,7 @@ class Static(TrafficParticipant):
         """
         Function (override) to return the color for marker messages.
 
-        :return: the color used by a vehicle marker
+        :return: the color used by a static obstacle marker
         :rtpye : std_msgs.msg.ColorRGBA
         """
         color = ColorRGBA()
