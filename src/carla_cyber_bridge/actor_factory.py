@@ -417,7 +417,7 @@ class ActorFactory(object):
             actor = Spectator(uid, name, parent, self.node, carla_actor)
         elif carla_actor.type_id.startswith("walker"):
             actor = Walker(uid, name, parent, self.node, carla_actor)
-        elif carla_actor.type_id.startswith("static"):
+        elif carla_actor.type_id.startswith("static.prop"):
             actor = Static(uid, name, parent, self.node, carla_actor)
         else:
             actor = Actor(uid, name, parent, self.node, carla_actor)
