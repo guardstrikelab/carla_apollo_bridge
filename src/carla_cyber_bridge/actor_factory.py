@@ -45,6 +45,7 @@ from carla_cyber_bridge.traffic import Traffic, TrafficLight
 from carla_cyber_bridge.traffic_lights_sensor import TrafficLightsSensor
 from carla_cyber_bridge.vehicle import Vehicle
 from carla_cyber_bridge.walker import Walker
+from carla_cyber_bridge.static import Static
 
 # to generate a random spawning position or vehicles
 import random
@@ -416,6 +417,8 @@ class ActorFactory(object):
             actor = Spectator(uid, name, parent, self.node, carla_actor)
         elif carla_actor.type_id.startswith("walker"):
             actor = Walker(uid, name, parent, self.node, carla_actor)
+        elif carla_actor.type_id.startswith("static.prop"):
+            actor = Static(uid, name, parent, self.node, carla_actor)
         else:
             actor = Actor(uid, name, parent, self.node, carla_actor)
 

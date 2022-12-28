@@ -12,6 +12,7 @@ handle a object sensor
 from carla_cyber_bridge.pseudo_actor import PseudoActor
 from carla_cyber_bridge.vehicle import Vehicle
 from carla_cyber_bridge.walker import Walker
+from carla_cyber_bridge.static import Static
 
 from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle, PerceptionObstacles
 
@@ -82,11 +83,13 @@ class ObjectSensor(PseudoActor):
         cyber_objects = PerceptionObstacles()
         cyber_objects.header.CopyFrom(self.get_msg_header(frame_id="map", timestamp=timestamp))
         for actor_id in self.actor_list.keys():
-            # currently only Vehicles and Walkers are added to the object array
+            # currently only Vehicles, Walkers and Static Obstacles are added to the object array
             if self.parent is None or self.parent.uid != actor_id:
                 actor = self.actor_list[actor_id]
                 if isinstance(actor, Vehicle):
                     cyber_objects.perception_obstacle.append(actor.get_object_info())
                 elif isinstance(actor, Walker):
+                    cyber_objects.perception_obstacle.append(actor.get_object_info())
+                elif isinstance(actor, Static):
                     cyber_objects.perception_obstacle.append(actor.get_object_info())
         self.object_writer.write(cyber_objects)
