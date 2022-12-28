@@ -83,7 +83,7 @@ class ObjectSensor(PseudoActor):
         cyber_objects = PerceptionObstacles()
         cyber_objects.header.CopyFrom(self.get_msg_header(frame_id="map", timestamp=timestamp))
         for actor_id in self.actor_list.keys():
-            # currently only Vehicles and Walkers are added to the object array
+            # currently only Vehicles, Walkers and Static Obstacles are added to the object array
             if self.parent is None or self.parent.uid != actor_id:
                 actor = self.actor_list[actor_id]
                 if isinstance(actor, Vehicle):
