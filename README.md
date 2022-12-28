@@ -8,7 +8,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h1 align="center">carla_apollo_bridge</h1>
+  <h1 align="center">Carla Apollo Bridge</h1>
 
   <p align="center">
     <b>Carla & Apollo Co-simulation</b>
@@ -123,7 +123,7 @@ Alternatively, simply perform the following steps：
    ```sh
    bash docker/scripts/dev_start.sh
    ```
-   to start Apollo development Docker container.
+   to start Apollo development docker container.
    <br>If you encounter any error, try
    ```sh
    sudo rm -rf /apollo/.cache
