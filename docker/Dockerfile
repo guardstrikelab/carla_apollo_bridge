@@ -2,8 +2,8 @@ FROM auroai/cyber:v5.0.0
 # cyber / bridge requirements
 RUN apt update && \
     apt install -y python-pip && \
-    pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && \
-    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip install --upgrade pip -i https://my-company/nexus/repository/pypi-group/simple && \
+    pip config set global.index-url https://my-company/nexus/repository/pypi-group/simple && \
     pip install \
     numpy \
     opencv-python==4.2.0.32 \
