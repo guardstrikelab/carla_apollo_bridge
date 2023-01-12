@@ -2,7 +2,7 @@ xhost +
 docker run \
     --rm \
     --privileged \
-    -e DISPLAY \
+    -e DISPLAY=$DISPLAY \
     --gpus=all \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -tid \
