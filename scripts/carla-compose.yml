@@ -14,7 +14,7 @@ services:
             - "2000:2000"
             - "2001:2001"
             - "2002:2002"
-
+        network_mode: "host"
         deploy:
           resources:
             reservations:
