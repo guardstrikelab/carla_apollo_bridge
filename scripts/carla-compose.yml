@@ -8,14 +8,21 @@ services:
             max-file: "3"
         privileged: true
         environment:
-            SDL_VIDEODRIVER: x11
-            DISPLAY: $DISPLAY
+          SDL_VIDEODRIVER: x11
+          DISPLAY: $DISPLAY
         ports:
             - "2000:2000"
             - "2001:2001"
             - "2002:2002"
+        network_mode: "host"
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: 1
+                  capabilities: ["gpu"]
 
-        runtime: nvidia
         command: ./CarlaUE4.sh  -quality-level=Low -carla-rpc-port=2000
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix:rw
