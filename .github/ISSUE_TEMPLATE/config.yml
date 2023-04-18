@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: carla_apollo_bridge Community Repo
+    url: https://github.com/guardstrikelab/carla_apollo_bridge
+    about: Please see our community docs here.
+  - name: carla_apollo_bridge Discord Chat
+    url: https://bbs.carla.org.cn/ask
+    about: Please ask questions or troubleshooting help here.
