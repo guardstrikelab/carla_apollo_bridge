@@ -1,4 +1,4 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: carla_apollo_bridge Community Repo
     url: https://github.com/guardstrikelab/carla_apollo_bridge
