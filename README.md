@@ -52,6 +52,7 @@
   </ol>
 </details> -->
 
+![visitor](https://visitor_badge.deta.dev/?id=github.guardstrikelab.carla_apollo_bridge)
 ![issues](https://img.shields.io/github/issues/guardstrikelab/carla_apollo_bridge)
 ![issues-closed](https://img.shields.io/github/issues-closed/guardstrikelab/carla_apollo_bridge)
 ![issues-pr](https://img.shields.io/github/issues-pr/guardstrikelab/carla_apollo_bridge)
