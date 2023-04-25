@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     simulator:
-        image: carlasim/carla:0.9.13
+        image: carlasim/carla:0.9.14
         logging:
           options:
             max-size: "10m"
