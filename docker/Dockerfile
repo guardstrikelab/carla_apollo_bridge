@@ -1,4 +1,4 @@
-FROM auroai/cyber:v5.0.0
+FROM synkrotron/cyber:v5.0.0
 # cyber / bridge requirements
 RUN apt update && \
     apt install -y python-pip && \
