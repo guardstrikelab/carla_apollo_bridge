@@ -12,7 +12,7 @@ RUN apt update && \
     pyproj \
     pyyaml \
     transforms3d\
-    carla==0.9.13
+    carla==0.9.14
 RUN echo "source /apollo/cyber/setup.bash" >> ~/.bashrc && \
     echo "export CARLA_PYTHON_ROOT=/apollo/cyber/carla_bridge/carla_python" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:/apollo/py_proto" >> ~/.bashrc && \
