@@ -28,7 +28,7 @@ The preceding command starts a Carla container with HOST network. You can access
 cd carla_apollo_bridge/docker
 ./build_docker.sh
 ./run_docker.sh
-docker exec -ti carla_cyber_0.9.13 bash
+docker exec -ti carla_cyber_0.9.14 bash
 ```
 The preceding command starts Carla Apollo Bridge container. By default, the container uses the Docker Bridge Network and its external address is 172.17.0.X. The container uses the CyberRT environment, which is in the same Cyber Network as the Apollo container. They can discover and communicate with each other.
 
