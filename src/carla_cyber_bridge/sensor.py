@@ -29,6 +29,7 @@ from carla_cyber_bridge.actor import Actor
 
 from modules.drivers.proto.pointcloud_pb2 import PointXYZIT, PointCloud
 from modules.transform.proto.transform_pb2 import Transform, TransformStamped
+from modules.drivers.proto.conti_radar_pb2 import ContiRadar
 
 
 class Sensor(Actor):
@@ -286,3 +287,7 @@ def create_cloud(header, points):
                       point=points,
                       width=len(points),
                       height=1)
+def create_radar(header, contiobs):
+
+    return ContiRadar(header=header,
+                      contiobs=contiobs)
