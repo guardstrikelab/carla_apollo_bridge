@@ -340,7 +340,7 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-This work is based on the following open-source projects,
+This work is based on the following open-source projects:
 
 * [Apollo](https://github.com/ApolloAuto/apollo)
 * [Carla Apollo Bridge](https://github.com/AuroAi/carla_apollo_bridge)
