@@ -83,12 +83,12 @@ class Lidar(Sensor):
             lidar_data, (int(lidar_data.shape[0] / 4), 4))
         # we take the opposite of y axis
         # (as lidar point are express in left handed coordinate system, and ros need right handed)
-        # lidar_data[:, 1] *= -1
+        lidar_data[:, 1] *= -1
 
-        lidar_data = lidar_data[:, :3]
-        lidar_data[:, 0:2] *= -1
+        # lidar_data = lidar_data[:, :3]
+        # lidar_data[:, 0:2] *= -1
         # we also need to permute x and y
-        lidar_data = lidar_data[..., [1, 0, 2]]
+        # lidar_data = lidar_data[..., [1, 0, 2]]
 
         point_cloud_msg = PointCloud()
         point_cloud_msg.header.CopyFrom(self.parent.get_msg_header())
