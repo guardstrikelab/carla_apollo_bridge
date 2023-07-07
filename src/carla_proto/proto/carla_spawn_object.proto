@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package apollo.cyber.carla_bridge.proto;
 
-import "modules/localization/proto/pose.proto";
+import "modules/common_msgs/localization_msgs/pose.proto";
 
 message KeyValue {
   optional string key = 1;

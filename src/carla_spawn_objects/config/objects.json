@@ -14,7 +14,7 @@
             "id": "map"
         },
         {
-            "type": "vehicle.tesla.model3",
+            "type": "vehicle.lincoln.mkz_2017",
             "id": "ego_vehicle",
             "sensors":
             [

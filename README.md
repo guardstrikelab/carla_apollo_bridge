@@ -67,7 +67,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About
-This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with Carla 0.9.14 and the Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
+This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with Latest version Carla 0.9.14 and the Apollo v8.0.0
 
 ![image](docs/images/demo.gif)
 
@@ -114,25 +114,31 @@ Alternatively, simply perform the following steps：
 * Refer to this link：
   <br> https://github.com/ApolloAuto/apollo/blob/master/docs/01_Installation%20Instructions/apollo_software_installation_guide.md
 
-1. We patched Apollo in order to work with our bridge, for now please use the guardstrike/apollo_carla_bridge branch from our fork. 
-
+1. Git pulls official Apollo 8.0.0 code
    ```sh
-   # Using SSH
-   git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
-   
-   #Using HTTPS
-   git clone --branch guardstrike/apollo_carla_bridge https://github.com/guardstrikelab/apollo.git
+   git clone -b v8.0.0 git@github.com:ApolloAuto/apollo.git
    ```
-
-   We will be sending this patch upstream soon so that you can just clone the official Apollo next time.
-
 2. Build Apollo
    
    ```sh
    cd apollo
    echo "export APOLLO_ROOT_DIR=$(pwd)" >> ~/.bashrc  && source ~/.bashrc
    ```
+   We need to modify the Apollo code as follows:
 
+   In apollo/cyber/setup.bash,
+   ```
+   CYBER_IP=172.17.0.1
+   ```
+   and In apollo/modules/dreamview/conf/hmi_modes/mkz_standard_debug.pb.txt
+   ```
+   cyber_modules {
+     key: "Localization"
+     value: {
+       dag_files: "/apollo/modules/localization/dag/dag_streaming_rtk_localization.dag"
+     }
+   }
+   ```
    Then, run:
 
    ```sh
@@ -155,12 +161,6 @@ Alternatively, simply perform the following steps：
    [ OK ]   bash docker/scripts/dev_into.sh
    [ OK ] Enjoy!
    ```
-   > Above If you occured error as "ERROR: Config value 'cuda' is not defined in any .rc file",you can try 
-
-   ```sh
-   ./apollo.sh config -n
-   ```
-
    Run this command to enter the container
 
    ```sh
@@ -192,6 +192,12 @@ Alternatively, simply perform the following steps：
    ```sh
    http://localhost:8888/
    ```
+    > Above If you occured error as "ERROR: Config value 'cuda' is not defined in any .rc file",you can try 
+
+   ```sh
+   ./apollo.sh config -n
+   ```
+
 ### Run Carla
 
 * Clone the carla_apollo_bridge project
@@ -246,7 +252,7 @@ Alternatively, simply perform the following steps：
 
     Run the following command in the container
     ```sh
-    ./apollo.sh build_cyber opt
+    ./apollo.sh build cyber
     ```
     The following information is displayed after the compilation is successful:
     ```sh

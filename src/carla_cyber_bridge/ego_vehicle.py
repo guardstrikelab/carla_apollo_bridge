@@ -28,14 +28,14 @@ from cyber.carla_bridge.carla_proto.proto.carla_ego_vehicle_pb2 import (
 )
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA
 from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import Twist, Accel
-from modules.localization.proto.localization_pb2 import LocalizationEstimate, LocalizationStatus
-from modules.localization.proto.gps_pb2 import Gps
-from modules.canbus.proto.chassis_pb2 import Chassis
-from modules.control.proto.control_cmd_pb2 import ControlCommand
-from modules.planning.proto.planning_pb2 import ADCTrajectory
-from modules.common.proto.error_code_pb2 import ErrorCode
-from modules.routing.proto.routing_pb2 import RoutingResponse
-from modules.transform.proto.transform_pb2 import TransformStamped, TransformStampeds
+from modules.common_msgs.localization_msgs.localization_pb2 import LocalizationEstimate, LocalizationStatus
+from modules.common_msgs.localization_msgs.gps_pb2 import Gps
+from modules.common_msgs.chassis_msgs.chassis_pb2 import Chassis
+from modules.common_msgs.control_msgs.control_cmd_pb2 import ControlCommand
+from modules.common_msgs.planning_msgs.planning_pb2 import ADCTrajectory
+from modules.common_msgs.basic_msgs.error_code_pb2 import ErrorCode
+from modules.common_msgs.routing_msgs.routing_pb2 import RoutingResponse
+from modules.common_msgs.transform_msgs.transform_pb2 import TransformStamped, TransformStampeds
 
 
 class EgoVehicle(Vehicle):
@@ -204,8 +204,8 @@ class EgoVehicle(Vehicle):
 
         transform = self.carla_actor.get_transform()
         spectator = self.world.get_spectator()
-        print("vehicle location {},{}".format(-10 * math.radians(math.cos(transform.rotation.yaw)),
-                                              -10 * math.radians(math.sin(transform.rotation.yaw))))
+        # print("vehicle location {},{}".format(-10 * math.radians(math.cos(transform.rotation.yaw)),
+        #                                       -10 * math.radians(math.sin(transform.rotation.yaw))))
         spectator.set_transform(
             carla.Transform(transform.location + carla.Location(x=-10 * math.cos(math.radians(transform.rotation.yaw)),
                                                                 y=-10 * math.sin(math.radians(transform.rotation.yaw)),
@@ -358,7 +358,7 @@ class EgoVehicle(Vehicle):
             vehicle_control.brake = cyber_vehicle_control.brake / 100.0
             rate = cyber_vehicle_control.steering_rate / 100.0
             vehicle_control.steer = -cyber_vehicle_control.steering_target / 100.0
-            self.node.loginfo("rate is {}, steer is {}".format(rate, -vehicle_control.steer))
+            # self.node.loginfo("rate is {}, steer is {}".format(rate, -vehicle_control.steer))
             vehicle_control.hand_brake = cyber_vehicle_control.parking_brake
             vehicle_control.reverse = cyber_vehicle_control.gear_location == Chassis.GearPosition.GEAR_REVERSE
             self.carla_actor.apply_control(vehicle_control)

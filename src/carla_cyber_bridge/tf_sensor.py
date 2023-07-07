@@ -15,7 +15,7 @@ import cyber_compatibility as cybercomp
 
 from carla_cyber_bridge.pseudo_actor import PseudoActor
 
-from modules.transform.proto.transform_pb2 import Transform, TransformStamped
+from modules.common_msgs.transform_msgs.transform_pb2 import Transform, TransformStamped
 
 
 class TFSensor(PseudoActor):

@@ -14,11 +14,11 @@ import carla_common.transforms as trans
 
 from carla_cyber_bridge.sensor import Sensor
 
-from modules.drivers.gnss.proto.gnss_best_pose_pb2 import GnssBestPose
+from modules.common_msgs.sensor_msgs.gnss_best_pose_pb2 import GnssBestPose
 from modules.drivers.gnss.proto.gnss_status_pb2 import GnssStatus
-from modules.drivers.gnss.proto.heading_pb2 import Heading
-from modules.localization.proto.gps_pb2 import Gps
-from modules.drivers.gnss.proto.ins_pb2 import InsStat
+from modules.common_msgs.sensor_msgs.heading_pb2 import Heading
+from modules.common_msgs.localization_msgs.gps_pb2 import Gps
+from modules.common_msgs.sensor_msgs.ins_pb2 import InsStat
 
 class Gnss(Sensor):
 

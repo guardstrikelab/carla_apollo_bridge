@@ -3,8 +3,8 @@ syntax = "proto2";
 package apollo.cyber.carla_bridge.proto;
 
 import "cyber/carla_bridge/carla_proto/proto/carla_geometry.proto";
-import "modules/common/proto/header.proto";
-import "modules/localization/proto/pose.proto";
+import "modules/common_msgs/basic_msgs/header.proto";
+import "modules/common_msgs/localization_msgs/pose.proto";
 
 message Odometry {
   optional apollo.common.Header header = 1;

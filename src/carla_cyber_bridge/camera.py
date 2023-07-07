@@ -23,8 +23,8 @@ import carla_common.transforms as trans
 from carla_cyber_bridge.sensor import Sensor, create_cloud
 
 from cyber.carla_bridge.carla_proto.proto.carla_camera_info_pb2 import CameraInfo
-from modules.drivers.proto.sensor_image_pb2 import Image, CompressedImage
-from modules.drivers.proto.pointcloud_pb2 import PointXYZIT, PointCloud
+from modules.common_msgs.sensor_msgs.sensor_image_pb2 import Image, CompressedImage
+from modules.common_msgs.sensor_msgs.pointcloud_pb2 import PointXYZIT, PointCloud
 
 
 class Camera(Sensor):

@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package apollo.cyber.carla_bridge.proto;
 
-import "modules/common/proto/header.proto";
+import "modules/common_msgs/basic_msgs/header.proto";
 
 message RegionOfInterest {
   optional uint32 x_offset = 1;

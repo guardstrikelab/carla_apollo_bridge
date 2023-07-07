@@ -14,7 +14,7 @@ Classes to handle Carla lidars
 import numpy
 
 from carla_cyber_bridge.sensor import Sensor, create_cloud
-from modules.drivers.proto.pointcloud_pb2 import PointXYZIT, PointCloud
+from modules.common_msgs.sensor_msgs.pointcloud_pb2 import PointXYZIT, PointCloud
 
 
 class Lidar(Sensor):

@@ -11,7 +11,7 @@ Base Class to handle Pseudo Actors (that are not existing in Carla world)
 
 import numpy as np
 
-from modules.common.proto.header_pb2 import Header
+from modules.common_msgs.basic_msgs.header_pb2 import Header
 
 
 class PseudoActor(object):

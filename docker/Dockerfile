@@ -1,4 +1,4 @@
-FROM synkrotron/cyber:v5.0.0
+FROM synkrotron/cyber:v8.0.0
 # cyber / bridge requirements
 RUN apt update && \
     apt install -y python-pip && \
@@ -11,12 +11,14 @@ RUN apt update && \
     pygame \
     pyproj \
     pyyaml \
-    transforms3d\
-    carla==0.9.14
+    transforms3d
 RUN echo "source /apollo/cyber/setup.bash" >> ~/.bashrc && \
     echo "export CARLA_PYTHON_ROOT=/apollo/cyber/carla_bridge/carla_python" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:/apollo/py_proto" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:/apollo/cyber" >> ~/.bashrc && \
+    echo "export PYTHONPATH=\$PYTHONPATH:/apollo/cyber/python" >> ~/.bashrc && \
+    echo "export PYTHONPATH=\$PYTHONPATH:/apollo/cyber/carla_bridge" >> ~/.bashrc && \
+    echo "export PYTHONPATH=\$PYTHONPATH:\$CARLA_PYTHON_ROOT/carla/dist/carla-0.9.14-py3.7-linux-x86_64.egg" >> ~/.bashrc && \
     echo "export PYTHONPATH=\$PYTHONPATH:\$CARLA_PYTHON_ROOT/carla" >> ~/.bashrc && \
     echo "" >> ~/.bashrc
 COPY setup.bash /apollo/cyber/

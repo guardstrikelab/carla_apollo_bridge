@@ -3,7 +3,7 @@ syntax = "proto2";
 package apollo.cyber.carla_bridge.proto;
 
 import "cyber/carla_bridge/carla_proto/proto/carla_bounding_box.proto";
-import "modules/localization/proto/pose.proto";
+import "modules/common_msgs/localization_msgs/pose.proto";
 
 message CarlaTrafficLightInfo {
   optional uint32 id = 1;

@@ -15,7 +15,7 @@ from carla import WalkerControl
 from carla_cyber_bridge.traffic_participant import TrafficParticipant
 
 from cyber.carla_bridge.carla_proto.proto.carla_walker_control_pb2 import CarlaWalkerControl
-from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle
+from modules.common_msgs.perception_msgs.perception_obstacle_pb2 import PerceptionObstacle
 
 
 class Walker(TrafficParticipant):

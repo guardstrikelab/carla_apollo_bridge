@@ -7,7 +7,7 @@
 # For a copy, see <https://opensource.org/licenses/MIT>.
 #
 
-from cyber_py import cyber, cyber_time, cyber_timer, parameter
+from cyber_py3 import cyber, cyber_time, cyber_timer, parameter
 
 from cyber_compatibility.loggings import logdebug, loginfo, logwarn, logerr, logfatal
 from cyber_compatibility.exceptions import *

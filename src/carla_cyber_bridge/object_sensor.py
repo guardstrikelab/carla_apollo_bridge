@@ -14,7 +14,7 @@ from carla_cyber_bridge.vehicle import Vehicle
 from carla_cyber_bridge.walker import Walker
 from carla_cyber_bridge.static import Static
 
-from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle, PerceptionObstacles
+from modules.common_msgs.perception_msgs.perception_obstacle_pb2 import PerceptionObstacle, PerceptionObstacles
 
 
 class ObjectSensor(PseudoActor):

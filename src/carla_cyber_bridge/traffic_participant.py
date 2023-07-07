@@ -17,7 +17,7 @@ from carla_cyber_bridge.actor import Actor
 
 from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import SolidPrimitive
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA, Marker, MarkerList
-from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle
+from modules.common_msgs.perception_msgs.perception_obstacle_pb2 import PerceptionObstacle
 
 
 class TrafficParticipant(Actor):

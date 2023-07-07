@@ -13,8 +13,8 @@ import carla_common.transforms as trans
 
 from .sensor import Sensor
 
-from modules.drivers.gnss.proto.imu_pb2 import Imu
-from modules.localization.proto.imu_pb2 import CorrectedImu
+from modules.common_msgs.sensor_msgs.imu_pb2 import Imu
+from modules.common_msgs.localization_msgs.imu_pb2 import CorrectedImu
 
 
 class ImuSensor(Sensor):

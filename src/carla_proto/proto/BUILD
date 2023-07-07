@@ -26,9 +26,9 @@ proto_library(
         "carla_world_info.proto",
     ],
     deps = [
-        "//modules/common/proto:header_proto_lib",
-        "//modules/common/proto:geometry_proto_lib",
-        "//modules/data/proto:tools_frame_proto_lib",
-        "//modules/localization/proto:pose_proto_lib",
+        "//modules/common_msgs/basic_msgs:header_proto",
+        "//modules/common_msgs/basic_msgs:geometry_proto",
+        "//modules/data/proto:frame_proto",
+        "//modules/common_msgs/localization_msgs:pose_proto",
     ],
 )

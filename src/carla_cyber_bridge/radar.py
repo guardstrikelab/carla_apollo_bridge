@@ -15,8 +15,8 @@ import math
 
 from carla_cyber_bridge.sensor import Sensor, create_cloud, create_radar
 
-from modules.drivers.proto.pointcloud_pb2 import PointXYZIT, PointCloud
-from modules.drivers.proto.conti_radar_pb2 import ContiRadar, ContiRadarObs
+from modules.common_msgs.sensor_msgs.pointcloud_pb2 import PointXYZIT, PointCloud
+from modules.common_msgs.sensor_msgs.conti_radar_pb2 import ContiRadar, ContiRadarObs
 
 
 class Radar(Sensor):

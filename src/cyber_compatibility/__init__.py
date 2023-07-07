@@ -19,7 +19,7 @@ import cyber_compatibility.node
 
 from cyber_compatibility.loggings import logdebug, loginfo, logwarn, logerr, logfatal
 
-from cyber_py import cyber, cyber_time
+from cyber_py3 import cyber, cyber_time
 
 def init(name, args=None):
     cyber.init(name)

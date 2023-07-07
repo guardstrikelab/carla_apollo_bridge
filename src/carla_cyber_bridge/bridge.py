@@ -39,7 +39,7 @@ from carla_cyber_bridge.carla_status_writer import CarlaStatusWriter
 from carla_cyber_bridge.ego_vehicle import EgoVehicle
 from carla_cyber_bridge.world_info import WorldInfo
 
-from cyber_py import cyber
+from cyber_py3 import cyber
 from cyber.carla_bridge.carla_proto.proto.carla_clock_pb2 import Time, Clock
 from cyber.carla_bridge.carla_proto.proto.carla_control_pb2 import CarlaControl
 from cyber.carla_bridge.carla_proto.proto.carla_spawn_object_pb2 import (
@@ -366,8 +366,8 @@ class CarlaCyberBridge(CompatibleNode):
         """
         if cybercomp.ok():
             self.timestamp = cybercomp.get_timestamp(carla_timestamp.elapsed_seconds, from_sec=True)
-            self.clock_writer.write(Clock(clock=Time(secs=self.timestamp['secs'],
-                                                     nsecs=self.timestamp['nsecs'])))
+            self.clock_writer.write(Clock(clock=Time(secs=int(self.timestamp['secs']),
+                                                     nsecs=int(self.timestamp['nsecs']))))
 
     def destroy(self):
         """

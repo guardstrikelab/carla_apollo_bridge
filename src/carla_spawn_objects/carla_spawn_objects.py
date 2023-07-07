@@ -40,7 +40,7 @@ from cyber.carla_bridge.carla_proto.proto.carla_destroy_object_pb2 import (
     DestroyObjectResponse
 )
 
-from modules.localization.proto.pose_pb2 import Pose
+from modules.common_msgs.localization_msgs.pose_pb2 import Pose
 
 # ==============================================================================
 # -- CarlaSpawnObjects ------------------------------------------------------------

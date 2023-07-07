@@ -27,9 +27,9 @@ import cyber_compatibility as cybercomp
 
 from carla_cyber_bridge.actor import Actor
 
-from modules.drivers.proto.pointcloud_pb2 import PointXYZIT, PointCloud
-from modules.transform.proto.transform_pb2 import Transform, TransformStamped
-from modules.drivers.proto.conti_radar_pb2 import ContiRadar
+from modules.common_msgs.sensor_msgs.pointcloud_pb2 import PointXYZIT, PointCloud
+from modules.common_msgs.transform_msgs.transform_pb2 import Transform, TransformStamped
+from modules.common_msgs.sensor_msgs.conti_radar_pb2 import ContiRadar
 
 
 class Sensor(Actor):

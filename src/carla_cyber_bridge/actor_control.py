@@ -19,7 +19,7 @@ import carla_common.transforms as trans
 from carla_cyber_bridge.pseudo_actor import PseudoActor
 from carla_cyber_bridge.sensor import Sensor
 
-from modules.localization.proto.pose_pb2 import Pose
+from modules.common_msgs.localization_msgs.pose_pb2 import Pose
 from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import Twist
 
 
