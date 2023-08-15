@@ -120,7 +120,6 @@ If you wish to try it out, please contact us through one of the following method
 
 - email: xiaofei@synkrotron.ai
 - email: leili@synkrotron.ai
-- email: contact@synkrotron.ai
 
 <!-- CONTRIBUTING -->
 ## Contribution
