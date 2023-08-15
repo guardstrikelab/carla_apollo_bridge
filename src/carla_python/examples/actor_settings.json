@@ -1,0 +1,33 @@
+{
+    "vehicles":
+    [
+        {
+            "type":"vehicle.bmw.grandtourer",
+            "rotation": [0.0, 180.0, 0.0], 
+            "location": [120.20, -1.8, 2.0],
+            "mode":"autopilot"
+        },
+        {
+            "type":"vehicle.bmw.grandtourer",
+            "rotation": [0.0, 180.0, 0.0], 
+            "location": [135.20, -1.8, 2.0],
+            "mode":"autopilot"
+        },
+        {
+            "type":"vehicle.bmw.grandtourer",
+            "rotation": [0.0, 180.0, 0.0], 
+            "location": [150.20, -1.8, 2.0],
+            "mode":"None"
+        }
+        
+    ],
+    "walkers":
+    [
+        {
+            "type":"walker.pedestrian.0001",
+            "rotation": [0.0, 180.0, 0.0], 
+            "location": [175, -1.8, 2.0],
+            "mode":"autopilot"
+        }
+    ]
+}
