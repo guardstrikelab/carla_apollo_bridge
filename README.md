@@ -114,6 +114,8 @@ With the freedom to select scenarios and evaluation rules, sensor models, and te
 
 Supporting different departments and teams to conduct simulation tasks, scenario building tasks, evaluation rule writing tasks, algorithm code submission tasks, etc. based on different business permissions.
 
+## Contact
+
 If you wish to try it out, please contact us through one of the following methods.
 
 - email: xiaofei@synkrotron.ai
