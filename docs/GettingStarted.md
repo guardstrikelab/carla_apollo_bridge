@@ -37,22 +37,41 @@ Alternatively, simply perform the following steps：
   sudo systemctl restart docker
   ```
 
+* docker-compose
+
+```
+     sudo curl -L "https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+* Change File Permission:
+
+  ``` sh
+  sudo chmod +x /usr/local/bin/docker-compose 
+  ```
+
+> Apply executable permissions to the standalone binary in the target path for the installation.
+> Test and execute compose commands using docker-compose.
+> **Note:**
+> If the command docker-compose fails after installation, check your path. You can also create a symbolic link to /usr/bin or any other directory in your path. For example:
+
+```sh
+ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+```
+
 ### Build And Run Apollo
 
 * Refer to this link：
   <br> https://github.com/ApolloAuto/apollo/blob/master/docs/01_Installation%20Instructions/apollo_software_installation_guide.md
 
-1. We patched Apollo in order to work with our bridge, for now please use the guardstrike/apollo_carla_bridge branch from our fork. 
+1. Clone apollo v8.0.0 
 
    ```sh
    # Using SSH
-   git clone --branch guardstrike/apollo_carla_bridge git@github.com:guardstrikelab/apollo.git
+   git clone -b v8.0.0 git@github.com:ApolloAuto/apollo.git
    
    #Using HTTPS
-   git clone --branch guardstrike/apollo_carla_bridge https://github.com/guardstrikelab/apollo.git
+   git clone -b v8.0.0 https://github.com/ApolloAuto/apollo.git
    ```
-
-   We will be sending this patch upstream soon so that you can just clone the official Apollo next time.
 
 2. Build Apollo
    
@@ -62,13 +81,6 @@ Alternatively, simply perform the following steps：
    ```
 
    Then, run:
-
-   ```sh
-   bash docker/scripts/dev_start.sh
-   ```
-
-   to start Apollo development docker container.
-   <br>If you encounter any error, try
 
    ```sh
    sudo rm -rf /apollo/.cache
@@ -122,7 +134,7 @@ Alternatively, simply perform the following steps：
    ```
 ### Run Carla
 
-* Clone the carla_apollo_bridge project
+* Clone the carla_apollo_bridge project outside Apollo container
 
   ```sh
   # Using SSH
@@ -132,69 +144,32 @@ Alternatively, simply perform the following steps：
   git clone https://github.com/guardstrikelab/carla_apollo_bridge.git
   ```
 
-* To download and install Compose standalone, run:
-
-```
-     sudo curl -L "https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-```
-
-* Change File Permission:
-
-  ``` sh
-  sudo chmod +x /usr/local/bin/docker-compose 
-  ```
-
-> Apply executable permissions to the standalone binary in the target path for the installation.
-> Test and execute compose commands using docker-compose.
-> **Note:**
-> If the command docker-compose fails after installation, check your path. You can also create a symbolic link to /usr/bin or any other directory in your path. For example:
-
-```sh
- sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-```
-
 * Pull carla image and run
 
   ```sh
-  cd carla_apollo_bridge/scripts
-  ./docker_run_carla.sh
+  cd carla_apollo_bridge
+  ./scripts/docker_run_carla.sh
   ```
 
-
-<!-- USAGE EXAMPLES -->
 ### Run carla_apollo_bridge
-1.  Run the following to enter the container. Note that `carla_apollo_bridge/src` is mapped to `/apollo/cyber/carla_bridge` within the container, this allows you to test any change you make to the bridge. 
+1.  Copy the src folder into Apollo container
     ```sh
-    cd carla_apollo_bridge/docker
-    ./build_docker.sh
-    ./run_docker.sh
-    docker exec -ti carla_cyber_0.9.14 bash
+    docker cp carla_bridge <apollo_container_name>:/apollo/modules/carla_bridge
     ```
-2.  Compile
+2.  Install carla_bridge
 
-    Run the following command in the container
+    Enter the Apollo container and run:
     ```sh
-    ./apollo.sh build_cyber opt
+    cd /apollo/modules/carla_bridge
+    chmod +x install.sh
+    ./install.sh
+    source ~/.bashrc
     ```
-    The following information is displayed after the compilation is successful:
-    ```sh
-    [INFO] Skipping revision recording
-    ============================
-    [ OK ] Build passed!
-    [INFO] Took 61 seconds
-    ```
-3. Start the bridge and spawn the ego vehicle
 
-    Run the following command in the container.
+3. Start the bridge
+
     ```sh
-    cd /apollo/cyber/carla_bridge
-    python carla_cyber_bridge/bridge.py
-    ```
-    Start a new terminal and run:
-    ```sh
-    docker exec -ti carla_cyber_0.9.14 bash
-    cd /apollo/cyber/carla_bridge
-    python carla_spawn_objects/carla_spawn_objects.py
+    python main.py
     ```
 
 ### Result
