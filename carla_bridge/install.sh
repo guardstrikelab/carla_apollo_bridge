@@ -16,7 +16,3 @@ if [ -f ~/.bashrc ] && ! grep -q 'export PYTHONPATH=$PYTHONPATH:/apollo/cyber' ~
     echo 'export PYTHONPATH=$PYTHONPATH:/apollo/bazel-bin' >> ~/.bashrc
 fi
 source ~/.bashrc
-
-# Build cyber
-cd /apollo
-./apollo.sh build

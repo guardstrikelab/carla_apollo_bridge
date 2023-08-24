@@ -93,9 +93,8 @@ class CarlaCyberBridge(CyberNode):
         )
         carla_spawn_objects_thread.daemo = True
         carla_spawn_objects_thread.start()
-        
         self.spin()
-        
+
     def carla_spawn_objects(self):
         self.spawn_objects_node = CarlaSpawnObjects(self)
         self.spawn_objects_node.spawn_objects()
@@ -105,7 +104,7 @@ class CarlaCyberBridge(CyberNode):
         if not self.shutdown.is_set():
             id_ = self.actor_factory.spawn_actor(req)
             self._registered_actors.append(id_)
-            
+
     def destroy_object(self, id_):
         destroyed_actors = self.actor_factory.destroy_actor(id_)
         success = bool(destroyed_actors)
@@ -180,8 +179,8 @@ def main():
     carla_bridge = CarlaCyberBridge()
 
     config_file = os.path.dirname(os.path.abspath(__file__)) + "/config/settings.yaml"
-
-    parameters = yaml.safe_load(open(config_file, encoding="utf-8"))
+    with open(config_file, encoding="utf-8") as f:
+        parameters = yaml.safe_load(f)
     carla_parameters = parameters["carla"]
 
     log.info(
@@ -193,10 +192,10 @@ def main():
             host=carla_parameters["host"], port=carla_parameters["port"]
         )
         carla_client.set_timeout(carla_parameters["timeout"])
-        
+
         carla_client.load_world(carla_parameters["town"])
         carla_world = carla_client.get_world()
-        
+
         log.info(f"Connect to {carla_parameters['host']}:{carla_parameters['port']} successfully.")
 
         carla_bridge.initialize_bridge(carla_world, parameters, log)
