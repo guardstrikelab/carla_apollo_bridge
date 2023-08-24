@@ -67,7 +67,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About
-This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with Carla 0.9.14 and the Apollo [master branch](https://github.com/ApolloAuto/apollo/commit/aa0c5eb66189b86a724206305712cfb337c07619) (newer than v7.0.0)
+This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with [Carla 0.9.14](https://github.com/carla-simulator/carla/tree/0.9.14) and the [Apollo v8.0.0](https://github.com/ApolloAuto/apollo/tree/v8.0.0) (v8.0.0)
 
 ![image](docs/images/demo.gif)
 
@@ -135,13 +135,10 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-<!-- LICENSE -->
 ## License
 
 Distributed under the Apache-2.0 License. See `LICENSE` for more information.
 
-<!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
 This work is based on the following open-source projects:
