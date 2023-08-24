@@ -1,0 +1,21 @@
+repos:
+  - repo: https://kgithub.com/PyCQA/isort.git
+    rev: 5.12.0 # Use the revision sha / tag you want to point at
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+  - repo: https://kgithub.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+  # - repo: https://gitlab.com/pycqa/flake8
+  #   rev: 4.0.1
+  #   hooks:
+  #     - id: flake8
+  #       language_version: python3
+  - repo: https://kgithub.com/pre-commit/mirrors-pylint
+    rev: 56b3cb4
+    hooks:
+      - id: pylint
+        args:
+          - --rcfile=.pylintrc

@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+    simulator:
+        image: carlasim/carla:0.9.14
+        logging:
+          options:
+            max-size: "10m"
+            max-file: "3"
+        privileged: true
+        environment:
+          SDL_VIDEODRIVER: x11
+          DISPLAY: $DISPLAY
+        ports:
+            - "2000:2000"
+            - "2001:2001"
+            - "2002:2002"
+        network_mode: "host"
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: 1
+                  capabilities: ["gpu"]
+
+        command: ./CarlaUE4.sh  -quality-level=Low -carla-rpc-port=2000
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix:rw
+            - /etc/localtime:/etc/localtime
+            - /etc/timezone:/etc/timezone
+        restart: always

@@ -1,0 +1,5 @@
+--index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+loguru==0.7.0
+networkx
+transforms3d==0.4.1

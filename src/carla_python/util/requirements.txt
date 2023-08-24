@@ -1,6 +1,0 @@
-numpy; python_version < '3.0'
-numpy==1.22.0; python_version >= '3.0'
-psutil
-py-cpuinfo
-pygame
-python-tr
