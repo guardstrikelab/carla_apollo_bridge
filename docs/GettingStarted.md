@@ -184,13 +184,13 @@ and this in Carla:
 
 ## Example: start a co-simulation
 1. Open apollo client: http://localhost:8888
-2. (Optional) Select "Task" in the sidebar and turn on "Camera Sensor" in "Others".
-3. (Optional) Select "Layer Menu" in the sidebar and turn on "Point Cloud" in "Perception".
-4. Select "Module Controller" in the sidebar and turn on "Routing" module.
-5. Select "Route Editing" in the sidebar.
-6. Click "Add Point of Interest" and left click at any point on the road to set the destination.
-7. Click "Send Routing Request".
-8. Select "Tasks" and click "Setup" to start co-simulation.
+2. If dreamview doesn't display the map, switch to carla_town04 and then switch back. 
+3. (Optional) Select "Task" in the sidebar and turn on "Camera Sensor" in "Others".
+4. (Optional) Select "Layer Menu" in the sidebar and turn on "Point Cloud" in "Perception".
+5. Select "Module Controller" in the sidebar and turn on "Routing", "Localization", "Planning", "Control" module.
+6. Select "Route Editing" in the sidebar.
+7. Click "Add Point of Interest" and left click at any point on the road to set the destination.
+8. Click "Send Routing Request".
 
 
 
