@@ -5,7 +5,6 @@
 #
 
 from websocket import create_connection
-from enum import Enum
 import json
 import math
 import logging
@@ -14,15 +13,9 @@ import os
 
 from carla_bridge.utils import transforms as trans
 
-from carla import Transform, Location, Rotation, Actor
+from carla import Transform, Actor
 
 log = logging.getLogger(__name__)
-
-
-# class CoordType(Enum):
-#     Carla = 1
-#     Latitude = 2
-
 
 class Connection:
     def __init__(self, Ego_vehilce, ip=os.environ.get("FUZZ_DREAMVIEW_HOST", "localhost"), port="8888"):
@@ -323,9 +316,9 @@ class Connection:
         # self.ego.state = initial_state
 
 
-class WaitApolloError(Exception):
-    """
-    Raised when Apollo control message is not received in time
-    """
+# class WaitApolloError(Exception):
+#     """
+#     Raised when Apollo control message is not received in time
+#     """
 
-    pass
+#     pass
