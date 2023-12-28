@@ -213,6 +213,8 @@ def main():
         settings.fixed_delta_seconds = None
         carla_world.apply_settings(settings)
         log.warning("Shutting down.")
+        if carla_bridge.shutdown :
+            carla_bridge.shutdown.set()
         carla_bridge.destroy()
         del carla_world
         del carla_client
