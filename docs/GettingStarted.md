@@ -133,7 +133,7 @@ Alternatively, simply perform the following steps：
    http://localhost:8888/
    ```
 
-## Refined Controller
+### Refined Controller
 
 Note that this project provides a refined MPC controller that improves the performance of the Apollo MPC controller in this co-simulation. Please refer to [RefinedController.md](RefinedController.md) for details.
 

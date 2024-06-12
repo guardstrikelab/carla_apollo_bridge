@@ -89,7 +89,7 @@ Following are the detailed report of discoverd bugs:
 
 
 
-## How to tune the controller
+## How to tune the controller by yourself?
 
 Due to the complexity of this co-simulation (e.g, complexity of the Apollo ADS, complex dynamics in Carla), the current controller is still far from being perfect. If you find the controller unsatisfying, you are encouraged to tune the controller as well. Following are some suggestions:
 
