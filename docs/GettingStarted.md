@@ -132,6 +132,12 @@ Alternatively, simply perform the following steps：
    ```sh
    http://localhost:8888/
    ```
+
+## Refined Controller
+
+Note that this project provides a refined MPC controller that improves the performance of the Apollo MPC controller in this co-simulation. Please refer to [RefinedController.md](RefinedController.md) for details.
+
+
 ### Run Carla
 
 * Clone the carla_apollo_bridge project outside Apollo container
@@ -192,8 +198,4 @@ and this in Carla:
 7. Click "Add Point of Interest" and left click at any point on the road to set the destination.
 8. Click "Send Routing Request".
 
-
-## Refined Controller
-
-This project also provides a refined MPC controller which performs better in the co-simulation. Please refer to [RefinedController.md](RefinedController.md) for details.
 

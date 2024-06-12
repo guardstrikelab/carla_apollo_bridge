@@ -1,10 +1,3 @@
-# Remark
-
-This rep is a branch of Apollo 8.0, in which the **controller** is particularly optimized for co-simulation with Carla, for a better co-simulation performance.
-
-[Apollo-Carla official bridge](https://github.com/guardstrikelab/carla_apollo_bridge)
-
-
 ## Demo Video
 
 Followings are the demo videos showing the performance of improved controller.
