@@ -193,5 +193,7 @@ and this in Carla:
 8. Click "Send Routing Request".
 
 
+## Refined Controller
 
+This project also provides a refined MPC controller which performs better in the co-simulation. Please refer to [RefinedController.md](RefinedController.md) for details.
 
