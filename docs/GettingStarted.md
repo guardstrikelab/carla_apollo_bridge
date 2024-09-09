@@ -193,7 +193,7 @@ and this in Carla:
 2. If dreamview doesn't display the map, switch to carla_town04 and then switch back. 
 3. (Optional) Select "Task" in the sidebar and turn on "Camera Sensor" in "Others".
 4. (Optional) Select "Layer Menu" in the sidebar and turn on "Point Cloud" in "Perception".
-5. Select "Module Controller" in the sidebar and turn on "Routing", "Localization", "Planning", "Control" module.
+5. Select "Module Controller" in the sidebar and turn on "Routing", "Localization", "Planning", "Control", "Predict" module.
 6. Select "Route Editing" in the sidebar.
 7. Click "Add Point of Interest" and left click at any point on the road to set the destination.
 8. Click "Send Routing Request".
