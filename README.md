@@ -1,11 +1,11 @@
 本分支仅用于 `Apollo` 和 `Oasis` 联合仿真文档说明，请按照文档步骤依次搭建环境并进行联合仿真。
 
-![oasis](./image/oasis.png)
+![oasis](./image/OASIS.png)
 <center><h4>OASIS SIM UI</h4></center>
 
 # 1. 安装 Oasis
 
-目前支持 Oasis V3.1.4； 如需要试用请联系商务 mailto: contact@synkrotron.ai 获取资源, 并备注本仓库地址：
+目前支持 Oasis V3.1.4； 如需要试用请联系商务 contact@synkrotron.ai 获取资源, 并备注本仓库地址：
 
 ```
 https://github.com/guardstrikelab/carla_apollo_bridge.git
