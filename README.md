@@ -1,150 +1,318 @@
-<a name="readme-top"></a>
+本分支仅用于 `Apollo` 和 `Oasis` 联合仿真文档说明，请按照文档步骤依次搭建环境并进行联合仿真。
+
+![oasis](./image/oasis.png)
+<center><h4>OASIS SIM UI</h4></center>
+
+# 1. 安装 Oasis
+
+目前支持 Oasis V3.1.4； 如需要试用请联系商务 mailto: contact@synkrotron.ai 获取资源, 并备注本仓库地址：
+
+```
+https://github.com/guardstrikelab/carla_apollo_bridge.git
+```
+
+```shell
+// 解压资源
+tar -zxvf OasisSimV3.1.4-single.tar.gz
+
+cd oasis
+
+//安装 OASIS
+./install.sh
+```
+
+安装成功后，申请 `license`，并运行内置基础场景，检查 `Oasis` 环境是否正常。
 
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <!-- <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a> -->
+# 2. 安装 Apollo
 
-  <h1 align="center">Carla Apollo Bridge</h1>
-  <p align="center">
-    <b>Carla & Apollo Co-simulation</b>
-    <!-- <br /> -->
-    <!-- <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br /> -->
-    <br />
-    <a href="https://github.com/guardstrikelab/apollo_carla">View Demo</a>
-    ·
-    <a href="https://github.com/guardstrikelab/apollo_carla/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/guardstrikelab/apollo_carla/pulls">Request Feature</a>
-    <br>
-  </p>
-</div>
+机器硬件配置要求：
+
+- 内存 32G
+- 显卡 nvidia 3060、3080，显卡驱动 525
+
+## 2.1 下载
+
+下载地址：
+
+- [https://github.com/ApolloAuto/apollo.git](https://github.com/ApolloAuto/apollo.git)
+- [https://gitee.com/ApolloAuto/apollo.git](https://gitee.com/ApolloAuto/apollo.git)
+
+上面两个地址我们选择国内的 `gitee` 速度会更快一些，执行下面命令，目前适配的是 `Apollo 8.0` 的版本。
+
+```shell
+git clone https://gitee.com/ApolloAuto/apollo.git
+
+cd apollo
+
+git checkout -b apollo_oasis  9537abebf3
+```
+
+> 注意: 切换到指定 commit ，该 commit 代码已经过调试验证可以正常开启 apollo 感知、规控等模块，其它 commit 代码未经验证。
 
 
+## 2.2 编译
 
-<!-- TABLE OF CONTENTS -->
-<!-- <details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About Carla Apollo Bridge</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details> -->
+依次执行下面命令，将 `apollo` 的安装目录添加到环境变量中。
 
-![visitor](https://komarev.com/ghpvc/?username=guardstrikelab&label=PROFILE+VIEWS)
-![issues](https://img.shields.io/github/issues/guardstrikelab/carla_apollo_bridge)
-![issues-closed](https://img.shields.io/github/issues-closed/guardstrikelab/carla_apollo_bridge)
-![issues-pr](https://img.shields.io/github/issues-pr/guardstrikelab/carla_apollo_bridge)
-![last-commit](https://img.shields.io/github/last-commit/guardstrikelab/carla_apollo_bridge)
-[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/guardstrikelab/carla_apollo_bridge)](https://www.tickgit.com/browse?repo=github.com/guardstrikelab/carla_apollo_bridge)
-![milestones](https://img.shields.io/github/milestones/all/guardstrikelab/carla_apollo_bridge)
-![repo-size](https://img.shields.io/github/repo-size/guardstrikelab/carla_apollo_bridge)
-![lines](https://img.shields.io/tokei/lines/github/guardstrikelab/carla_apollo_bridge)
-![language](https://img.shields.io/badge/language-python-orange.svg)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/guardstrikelab/carla_apollo_bridge/blob/master/LICENSE)
-![stars](https://img.shields.io/github/stars/guardstrikelab/carla_apollo_bridge?style=social)
+```shell
 
-<!-- ABOUT THE PROJECT -->
-## About
-This project aims to provide a data and control bridge for the communication between Carla and Apollo. It was tested with [Carla 0.9.14](https://github.com/carla-simulator/carla/tree/0.9.14) and the [Apollo v8.0.0](https://github.com/ApolloAuto/apollo/tree/v8.0.0) (v8.0.0)
+echo "export APOLLO_ROOT_DIR=$(pwd)" >> ~/.bashrc  && source ~/.bashrc
+```
 
-![image](docs/images/demo.gif)
+然后下载并启动 `apollo` 所需要的容器
 
-<!-- GETTING STARTED -->
-## Getting Started
-Please refer to [Getting Started](docs/GettingStarted.md)
+```shell
+bash docker/scripts/dev_start.sh
+```
 
-<!-- Premium -->
-## Premium
+如果是在机器上第一次运行该命令则会等待较长时间，下载过程中如果由于网络连接报错重新执行该命令即可。
 
-If you want to delve deeper into using Apollo for simulation in Carla, you can refer to the following information.
+下载完成后，会有如下显示：
 
-We ([SYNKROTRON](https://synkrotron.ai/)) offer a range of advanced features, including:
+```shell
+[ OK ] Congratulations! You have successfully finished setting up Apollo Dev Environment.
+[ OK ] To login into the newly created apollo_dev_lei container, please run the following command:
+[ OK ]   bash docker/scripts/dev_into.sh
+[ OK ] Enjoy!
+```
 
-### HIL cluster management
+如果出现 “ERROR: Config value 'cuda' is not defined in any .rc file” ，请尝试用下面命令解决：
 
-Supporting remote scheduling of VTD HIL, Dspace HIL, task management, data import and export, simulation logs, and simulation report retrieval.
+```shell
+./apollo.sh config -n
+```
 
-### SIL simulation capability
+执行下面命令，进入 `apollo` 容器，
 
-Supporting perceptual algorithm testing, regulatory testing, and end-to-end testing of perceptual regulation. The algorithm supports Apollo/ROS/Simulink/C++ access.
+```shell
+bash docker/scripts/dev_into.sh
+```
 
-### Scenario library management
+然后使用 `GPU` 编译
 
-Unified management of scene libraries, classification, grouping, and labeling of scene libraries, support for automatic push of scene libraries to HIL SIL simulation software for simulation testing.
+```shell
+./apollo.sh build_gpu
+```
 
-### Sensor model management
+同样，如果是第一次编译则需要等待较长时间，中途由于网络原因报错后，重新执行命令即可。
 
-Supporting the definition of sensor internal and external parameters for different vehicle models and versions, and supporting the deployment of sensor configurations for a certain vehicle model to the HIL SIL simulation platform.
+编译成功后会有下面打印，
 
-### Scenario building
+```shell
+==============================================
+[ OK ] Done building apollo. Enjoy!
+==============================================
+```
 
-Supporting different departments and teams to build scenarios through UI and code, making it easy for testing departments to use.
+# 3. 配置 Apollo
 
-### Analyze and evaluate
+## 3.1 修改 lidar 静态坐标配置参数
 
-Supporting the testing department to uniformly write testing rules in the cloud for backup.
+进入 `apollo` 容器内执行下面命令，
 
-### Cloud simulation task creation
+```shell
+cd /apollo/modules/drivers/lidar/velodyne/params/
+cp velodyne128_novatel_extrinsics_example.yaml velodyne128_novatel_extrinsics.yaml
 
-With the freedom to select scenarios and evaluation rules, sensor models, and tested objects (algorithm software or domain controllers) to initiate simulation tasks, and automatically send back test reports.
+# 将重命名的文件拷贝到指定目录
+cp velodyne128_novatel_extrinsics.yaml /apollo/modules/perception/data/params/
+```
 
-### Task management
+## 3.2 修改融合感知 camera 参数
 
-Supporting different departments and teams to conduct simulation tasks, scenario building tasks, evaluation rule writing tasks, algorithm code submission tasks, etc. based on different business permissions.
+```shell
+cd /apollo/modules/perception/production/conf/perception/camera/
+vi fusion_camera_detection_component.pb.txt
+# 修改 enable_visualization 开关为 true
+enable_visualization : true
 
-## Contact
+vim trafficlights_perception_component.config
+# 修改 tf2_timeout_second 为 0.1
+tf2_timeout_second : 0.1
+```
 
-If you wish to try it out, please contact us through one of the following methods.
+## 3.3 修改 lidar channel 名称
 
-- email: xiaofei@synkrotron.ai
-- email: leili@synkrotron.ai
+```shell
+cd /apollo/modules/perception/production/dag
+vim dag_streaming_perception.dag
+# 将第 23 行的
+channel: "/apollo/sensor/lidar128/compensator/PointCloud2"
+# 修改为
+channel: "/apollo/sensor/velodyne128/compensator/PointCloud2"
 
-<!-- CONTRIBUTING -->
-## Contribution
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contribution you make is **greatly appreciated**.
+vim dag_streaming_perception_lidar.dag
+将第 11 行的
+channel: "/apollo/sensor/lidar128/compensator/PointCloud2"
+# 修改为
+channel: "/apollo/sensor/velodyne128/compensator/PointCloud2"
+```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+## 3.4 启动相关模块
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+在 `apollo` 容器内部，执行下面命令，启动图片解压缩模块
 
-## License
+```shell
+nohup mainboard -d /apollo/modules/drivers/tools/image_decompress/dag/image_decompress.dag &
+```
 
-Distributed under the Apache-2.0 License. See `LICENSE` for more information.
+开启定位模块
 
-## Acknowledgments
+```shell
+nohup mainboard -d /apollo/modules/localization/dag/dag_streaming_rtk_localization.dag &
+```
 
-This work is based on the following open-source projects:
+# 4. 配置 Bridge
 
-* [Apollo](https://github.com/ApolloAuto/apollo)
-* [Carla Apollo Bridge](https://github.com/AuroAi/carla_apollo_bridge)
-* [Carla Apollo](https://github.com/casper-auto/carla-apollo)
+## 4.1 下载 apollo-bridge 源码
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+在 `apollo` 容器里面，进入 `/apollo/modules/` 目录，下载 `apollo-bridge` 代码。
+
+```shell
+cd apollo/modules
+git clone -b oasis https://github.com/guardstrikelab/carla_apollo_bridge.git apollo-bridge
+```
+
+## 4.2 安装依赖
+
+在 `apollo` 容器里面，进入 `apollo/modules/` 目录，执行命令。
+
+```shell
+cd /apollo/modules/apollo-bridge
+./install.sh
+```
+
+安装完成后，在终端输入 `python` 命令，执行如下命令，查看 `oasis` 版本。
+```shell
+Python 3.6.9 (default, Jun 29 2022, 11:45:57)
+[GCC 8.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import oasis
+>>> oasis.version
+'v3.1.0'
+>>>
+```
+有上面输出则说明安装成功。
+
+## 4.3 修改配置
+
+进入 `config` 目录下，修改 `settings.yaml` 中 `host` 为 `oasis` 机器的 `IP` 地址。
+
+```yaml
+  host: '192.168.1.201'
+```
+
+> 注意：测试主车需要搭载 IMU、GNSS、Lidar、Camera 等传感器
+
+
+修改 `ego_sensors` 中 `IMU`、`GNSS`、`lidar`、`front_6mm_camera`等传感器的 `role_name`，
+`role_name` 名称为主车名称 `ego_vehicle_` + 所搭载传感器名称。
+
+如下所示，`lidar` 在车辆的安装位置可以参考下图：
+
+![lidar](./image/lidar.png)
+
+```yaml
+  ego_sensors:
+    gnss:
+      role_name: "ego_vehicle_gnss"
+    imu:
+      role_name: "ego_vehicle_imu"
+    lidar:
+      role_name: "ego_vehicle_lidar"
+    front_6mm_camera:
+      role_name: "ego_vehicle_rgb"
+```
+
+如果要测试 `apollo` 感知模块，则设置 `perception_switch` 为 `true`
+
+```yaml
+  perception_switch: true
+```
+
+否则设置 `perception_switch` 为 `false`。
+
+## 4.4 启动 Dreamview
+
+最后在 `apollo` 容器内部 `/apollo/` 目录下执行命令，启动 `Dreamview` 页面
+
+```shell
+./scripts/bootstrap.sh
+```
+
+启动成功后，在浏览器中打开
+
+```shell
+http://localhost:8888/
+```
+
+在 `Dreamview` 中开启下面几个模块：
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/703243/1708322362209-85a05a9c-b9e2-4383-92e1-4e8d1b4dda01.png#averageHue=%230e1d24&clientId=u68c8337e-389a-4&from=paste&height=866&id=uc60e32e4&originHeight=866&originWidth=1833&originalType=binary&ratio=1&rotation=0&showTitle=false&size=118583&status=done&style=none&taskId=u936122e6-dec3-46df-b3b7-d293635bf0c&title=&width=1833)
+
+在命令行查看 `mainboard` 进程如下图所示表明各个模块启动正常。
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/703243/1708322389582-34a83e47-27dc-4de6-b88a-c003a7b4dd2b.png#averageHue=%23351429&clientId=u68c8337e-389a-4&from=paste&height=202&id=u7b8cc88b&originHeight=202&originWidth=1382&originalType=binary&ratio=1&rotation=0&showTitle=false&size=79252&status=done&style=none&taskId=u33a5c2fc-5e5c-4121-9908-f0f67d5a32e&title=&width=1382)
+# 5. 启动联合仿真
+
+1. 软件配置
+
+在 `oasis` 仿真软件的运行设置界面将【驾驶员预设】选择为 `NoDriver` 表示不使用仿真软件内置的控制算法。
+
+![no_driver](./image/no_driver.png)
+
+
+2. 运行脚本
+
+在 `apollo` 容器内部，进入 `apollo/modules/apollo-bridge` 目录下，执行命令
+
+```bash
+source ~/.bashrc
+python adapter.py
+```
+
+3. 下发任务
+
+然后在 `oasis` 仿真软件的场景库选择场景，点击运行
+
+![run_task](./image/run_task.png)
+
+如果一切正常，可以看到车辆能够正常运动起来，表示算法代码已正确接入。
+
+注意： 运行 `adapter.py` 脚本一定要在场景运行之前执行，否则会无法收到场景运行的任务消息。
+
+
+# 6. 常见问题
+
+## 6.1 Drieamview 网页无法打开
+
+执行 `./scripts/bootstrap.sh` 后提示
+
+```shell
+Failed to start Dreamview. Please check /apollo/data/log or /apollo/data/core for more information
+```
+
+该问题为官方 bug，详见
+
+- [Failed to start Dreamview](https://github.com/ApolloAuto/apollo/issues/14730)
+- [dreamview failed to start by ./scripts/bootstrap.sh](https://github.com/ApolloAuto/apollo/issues/12816)
+- [Fail to run ./scripts/bootstrap.sh on Ubuntu 20.04](https://github.com/ApolloAuto/apollo/issues/12285)
+
+issue 中提到的卸载 nvidia-docker 并不能解决该问题。
+
+现有解决方法为删除 apollo 目录，重新下载代码编译。
+
+> 调试经验： 不要远程访问 dreamview 可大概率避免该问题。
+
+
+## 6.2 No module named 'carla'
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/703243/1708322469697-7a5cc2f1-d936-44df-b63f-cf748a50530a.png#averageHue=%231c0b09&clientId=u68c8337e-389a-4&from=paste&height=151&id=u96a55da2&originHeight=151&originWidth=606&originalType=binary&ratio=1&rotation=0&showTitle=false&size=15216&status=done&style=none&taskId=u1c35888c-4dd9-41c3-873c-2bc0e7b0e4a&title=&width=606)
+
+解决方法：
+
+```shell
+source ~/.bashrc
+```

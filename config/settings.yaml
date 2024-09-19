@@ -1,0 +1,16 @@
+oasis:
+  host: '172.16.19.100'
+  carla_port: 2000
+
+  # 是否测试感知模块，默认开启 true，关闭 false
+  perception_switch: false
+  ego_sensors:
+    gnss:
+      role_name: "ego_vehicle_gnss"
+    imu:
+      role_name: "ego_vehicle_imu"
+    lidar:
+      role_name: "ego_vehicle_lidar"
+    # front_6mm_camera 放置到车头位置，否则影响感知
+    front_6mm_camera:
+      role_name: "ego_vehicle_rgb"
